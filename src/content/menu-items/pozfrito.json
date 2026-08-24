@@ -1,0 +1,7 @@
+{
+  "name": "Pozfrito",
+  "order": 5,
+  "description": "Fritos at the bottom, more on top, the walking taco eaten with a fork.",
+  "fulfillment": "market-and-trailer-only",
+  "fulfillmentNote": "No commissary path, market and trailer only."
+}

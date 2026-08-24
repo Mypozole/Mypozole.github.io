@@ -1,0 +1,7 @@
+{
+  "name": "Poztada",
+  "order": 3,
+  "description": "Pozole over crisp tostada shells, cabbage, radish, lime.",
+  "fulfillment": "market-and-trailer-only",
+  "fulfillmentNote": "No commissary path, market and trailer only."
+}

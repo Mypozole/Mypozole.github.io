@@ -1,0 +1,7 @@
+{
+  "name": "Pozole",
+  "order": 1,
+  "description": "Hot and ready, pork, chicken, or vegan. Toppings and salsas added by you at the table.",
+  "fulfillment": "delivery-or-pickup",
+  "fulfillmentNote": "The only item the commissary can fulfill, and only Pozole itself plus its toppings, nothing hot or assembled. $40 minimum, $5 delivery fee, per mypozole.com/online-ordering."
+}

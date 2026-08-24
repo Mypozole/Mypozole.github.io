@@ -1,0 +1,22 @@
+{
+  "protein": "vegan",
+  "style": "red",
+  "format": "32oz pouch",
+  "price": 15.99,
+  "priceSource": "mypozole.com/retail, fetched 2026-08-24 (page lists one flat price across pork/chicken/vegan, does not break out by style)",
+  "sku": null,
+  "ingredients": null,
+  "allergens": null,
+  "nutrition": {
+    "servingSize": "1 Cup (454g)",
+    "calories": 200,
+    "fatGrams": 2,
+    "cholesterolMg": 0,
+    "sodiumMg": 690,
+    "carbGrams": 41,
+    "fiberGrams": 6,
+    "sugarGrams": 15,
+    "proteinGrams": 4
+  },
+  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2)."
+}

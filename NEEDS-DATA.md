@@ -1,0 +1,79 @@
+# Still needed before launch
+
+Per START_HERE.md's hard rule: never invent a fact, leave it visibly marked as
+missing instead. This is the running list of what the content layer is
+missing on purpose. Check this before writing a page that touches any of
+these areas.
+
+## Blocking-ish (referenced by multiple pages)
+
+- **Toppings.** No verified list of topping names, which are included vs.
+  extra, or extra pricing anywhere in the handoff packet. `src/content/toppings/`
+  is an empty collection until this exists. Feeds the Toppings builder and
+  the catering configurator.
+- **Testimonials.** The brief says the reviews strip should be a live widget
+  pulled from Google/Yelp, not static copy, so `src/content/testimonials/`
+  is intentionally empty. If a static fallback is ever wanted, it needs real
+  quotes, not written-for-the-site ones.
+- **Founding story body.** `src/content/stories/founding-story.json` has the
+  record shape but no body text. Needs sourcing from three named articles
+  (SDVoyager, el Restaurante, Roaming Hunger) that weren't included in the
+  handoff packet.
+
+## Product record gaps
+
+- **SKU codes** for all 9 products: not given anywhere.
+- **Ingredient lists and allergens**: not given. Also, per the brief, these
+  should stay low-visibility on the site even once available (a collapsed
+  section or footnote), not a featured block.
+- **16oz cup price**: the $15.99 verified from mypozole.com/retail is for the
+  32oz retail pouch. No cup price is given anywhere.
+- **Cup serving-size fix**: the brief flags that Chicken White's cup label
+  wrongly lists "1 Cup (473mL)" (volume-based) instead of "1 Cup (454g)"
+  like the other two whites. Confirmed as a real production issue, not yet
+  reflected in any product record here since cup-format products aren't
+  modeled yet.
+
+## Wholesale record gaps
+
+- **Case pack, margin, lead time, certifications**: all listed as fields the
+  Wholesale page needs, none have values anywhere in the packet.
+- **Sell sheet file**: referenced as downloadable, doesn't exist yet as an
+  asset.
+
+## Location gaps
+
+- **Street addresses.** mypozole.com/retail gives city + a Google Maps
+  short link per store, not a street address. The Maps links are real and
+  usable for "get directions" style CTAs; a typed street address for display
+  would need to come from following each Maps link through or from Jorge
+  directly.
+- **Farmers markets, truck stops, corporate vending sites.** None of these
+  are static content, per the brief's own architecture: they come live from
+  Google Calendar (Farmers Markets, Food Truck Public/Private, Pop-up
+  Special Events, Catering Calendar). This is a real integration to build
+  (calendar API + the six-calendar classification test in
+  MyPozole_Calendar_Classification_Guide.md), not a data-entry task.
+
+## Catering gaps
+
+- **Pozole Party minimum headcount conflict.** MyPozole_Sitemap.md section
+  3c says 30-person minimum; MyPozole_Claude_Design_Build_Brief.md section 4
+  says 30-40 person minimums. Flagged in
+  `src/data/catering-pricing.json`, needs Jorge to confirm one number.
+- **Free delivery threshold.** The live online-ordering page references free
+  delivery above some order size but never states the amount.
+
+## Photos still needed (per START_HERE.md, "still needed, not blocking")
+
+The bag itself, both cup sizes at market, a side angle on Poznachos, a shot
+of the Burrito with salsa being added. The handoff packet's `/photos` folder
+has logo, an overhead hero bowl shot, and burrito/poznachos/pozole menu
+shots only, no Pozfrito photo at all yet.
+
+## Not in this packet, needed for the real build's stack
+
+Cloudflare Pages hosting, Sveltia CMS auth, Stripe Checkout, and Formspree
+all need real accounts and credentials before they can be wired up. Nothing
+here can create those accounts; they need to come from whoever owns (or
+will own) each service.

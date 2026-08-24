@@ -1,0 +1,24 @@
+{
+  "source": "MyPozole_Claude_Design_Build_Brief.md section 4, and MyPozole_Sitemap.md section 3, built from the confirmed 2026 catering PDF pricing",
+  "dropOff": {
+    "pricePerQuart": 16,
+    "minimumQuarts": 4,
+    "minimumDollars": 64,
+    "note": "$64 is the real catering drop-off minimum ($16/quart x 4-quart minimum). Separate and distinct from the $40 minimum on individual online Menu orders. Never merge the two numbers in copy.",
+    "leadTimes": [
+      { "range": "4 to 12 quarts", "notice": "24 hours" },
+      { "range": "13 to 50 quarts", "notice": "48 hours" },
+      { "range": "above 50 quarts", "notice": "contact directly" }
+    ]
+  },
+  "pozolePartyPackages": {
+    "names": ["Package A", "Package B", "Package C"],
+    "pricing": "per person, on-site service, tostada bar, self-serve toppings",
+    "minimumPeople": "30 (Sitemap section 3c) to 40 (Design Build Brief section 4) - the two source docs disagree on the exact minimum, confirm with Jorge before publishing a number",
+    "deposit": "50% holds the date",
+    "cancellationWindow": "60 days",
+    "serviceWindow": "two hour service window",
+    "addOns": ["Poztadas", "Poznachos", "agua fresca"],
+    "status": "Not bookable yet. On-site trailer service is pending San Diego County DEHQ licensing. Do not present as available until resolved."
+  }
+}
