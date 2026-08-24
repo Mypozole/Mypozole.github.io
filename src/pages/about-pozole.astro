@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getEntry } from 'astro:content';
+
+const founding = await getEntry('stories', 'founding-story');
+---
+<BaseLayout title="About Pozole | MyPozole" description="The three styles of pozole, what's really in the toppings, and how MyPozole started.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="label">About Pozole</p>
+      <h1>Three styles, one family recipe.</h1>
+    </header>
+
+    <div class="styles">
+      <div class="style-card">
+        <h3>White <span class="es">(Blanco)</span></h3>
+        <p>The base recipe, hominy and broth, built for everyone to finish their own way at the table.</p>
+      </div>
+      <div class="style-card">
+        <h3>Red <span class="es">(Rojo)</span></h3>
+        <p>Carries 50% of the daily value of Vitamin A across all three proteins. The red salsa on the side does not carry real heat, that comes from chile flakes, added separately.</p>
+      </div>
+      <div class="style-card">
+        <h3>Green <span class="es">(Verde)</span></h3>
+        <p>Meaningfully more Vitamin C than the other two. Unlike the red salsa, the green salsa does carry real heat, from serranos.</p>
+      </div>
+    </div>
+
+    <section class="story">
+      <h2>How MyPozole started</h2>
+      {founding?.data.body ? (
+        <p>{founding.data.body}</p>
+      ) : (
+        <p class="pending">This section is still being written, sourced from three published pieces about MyPozole. Coming soon.</p>
+      )}
+    </section>
+
+    <nav class="cross-links">
+      <a href="/menu">See the menu →</a>
+      <a href="/where-to-buy">Where to buy →</a>
+      <a href="/catering/home">Catering →</a>
+    </nav>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { padding: var(--space-6) 0 var(--space-3); }
+  .styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-bottom: var(--space-4); }
+  @media (max-width: 760px) { .styles { grid-template-columns: 1fr; } }
+  .style-card { border: 1px solid var(--line); border-radius: 4px; padding: var(--space-3); background: var(--paper); }
+  .style-card h3 { margin-bottom: 8px; }
+  .es { font-weight: 500; opacity: 0.55; font-size: 0.7em; }
+  .style-card p { font-size: 14.5px; opacity: 0.76; line-height: 1.6; }
+
+  .story { padding: var(--space-4) 0; border-top: 1px solid var(--line-soft); }
+  .story h2 { margin-bottom: var(--space-2); }
+  .story p { font-size: 16px; opacity: 0.8; max-width: 62ch; line-height: 1.65; }
+  .pending { opacity: 0.55; font-style: italic; }
+
+  .cross-links { display: flex; gap: var(--space-3); padding: var(--space-3) 0 var(--space-6); flex-wrap: wrap; }
+  .cross-links a { font-size: 14px; font-weight: 600; color: var(--terracotta); text-decoration: none; }
+  .cross-links a:hover { text-decoration: underline; }
+</style>

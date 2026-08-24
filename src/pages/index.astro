@@ -1,17 +1,65 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FindMyPozole from '../components/FindMyPozole.astro';
+import MenuTeaser from '../components/MenuTeaser.astro';
+import ReviewsStrip from '../components/ReviewsStrip.astro';
+import CateringTeaser from '../components/CateringTeaser.astro';
+import WhereToBuyTeaser from '../components/WhereToBuyTeaser.astro';
+import WholesaleTeaser from '../components/WholesaleTeaser.astro';
+import { Image } from 'astro:assets';
+import heroPhoto from '../assets/photos/hero_overhead_bowl.jpg';
 ---
+<BaseLayout
+  title="MyPozole"
+  description="Our family recipe White, Red, and Green Pozole, made in San Diego. A full meal in a bowl, finished your way at the table."
+>
+  <div class="wrap shell">
+    <main>
+      <header class="hero">
+        <p class="eyebrow">San Diego &middot; family recipe since day one</p>
+        <h1>A full meal<br />in a <em>bowl</em>.</h1>
+        <p class="hero-sub">Our family recipe White, Red, and Green Pozole, made in San Diego. <b>You finish it your way</b> at the table, so one pot works for everybody.</p>
+        <div class="hero-btns">
+          <a href="#find" class="btn">Find us this week</a>
+          <a href="/where-to-buy" class="btn outline">Buy a pouch</a>
+        </div>
+        <div class="hero-photo">
+          <Image src={heroPhoto} alt="Overhead shot of a bowl of MyPozole, toppings laid out around it" width={1200} height={750} />
+        </div>
+      </header>
+    </main>
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+    <FindMyPozole />
+  </div>
+
+  <MenuTeaser />
+  <ReviewsStrip />
+  <CateringTeaser />
+  <WhereToBuyTeaser />
+  <WholesaleTeaser />
+</BaseLayout>
+
+<style>
+  .shell { display: grid; grid-template-columns: 1fr 340px; gap: var(--space-6); align-items: start; }
+  @media (max-width: 1040px) { .shell { grid-template-columns: 1fr; gap: 0; } }
+
+  .hero { padding: var(--space-8) 0 var(--space-4); }
+  @media (max-width: 640px) { .hero { padding: var(--space-4) 0 var(--space-3); } }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--rust); margin-bottom: var(--space-3);
+  }
+  .eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--terracotta); }
+  .hero h1 { font-size: clamp(40px, 8vw, 80px); margin-bottom: var(--space-2); }
+  .hero h1 em { font-style: normal; color: var(--terracotta); }
+  .hero-sub { font-size: 18px; max-width: 44ch; opacity: 0.8; margin-bottom: var(--space-3); line-height: 1.55; }
+  .hero-sub b { font-weight: 600; opacity: 1; }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: var(--space-4); }
+
+  .hero-photo {
+    position: relative; aspect-ratio: 16 / 10; border-radius: 4px; overflow: hidden;
+    background: var(--sand);
+  }
+  .hero-photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center 35%; }
+</style>

@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+const locations = await getCollection('locations');
+---
+<section id="where-to-buy-teaser">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">Where to buy</p>
+      <h2>Take home a pouch.</h2>
+      <p>Frozen pouches, ready to heat on the stove. Not every store carries every style, check the full list before you drive over.</p>
+    </div>
+    <div class="stores">
+      {locations.map((loc) => (
+        <a href={loc.data.mapsLink ?? '/where-to-buy'} target="_blank" rel="noopener noreferrer" class="store">
+          <h3>{loc.data.name}</h3>
+          <p class="city">{loc.data.city}</p>
+        </a>
+      ))}
+    </div>
+    <a href="/where-to-buy" class="btn outline see-all">See every store and what's in stock</a>
+  </div>
+</section>
+
+<style>
+  .stores { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-bottom: var(--space-3); }
+  @media (max-width: 940px) { .stores { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .stores { grid-template-columns: 1fr; } }
+  .store {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 4px;
+    padding: var(--space-2) var(--space-2); text-decoration: none; display: block; transition: border-color 0.15s;
+  }
+  .store:hover { border-color: var(--tan); }
+  .store h3 { font-size: 18px; margin-bottom: 2px; }
+  .store .city { font-size: 13px; opacity: 0.6; }
+  .see-all { display: inline-block; }
+</style>

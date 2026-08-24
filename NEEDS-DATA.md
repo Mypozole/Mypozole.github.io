@@ -73,7 +73,15 @@ shots only, no Pozfrito photo at all yet.
 
 ## Not in this packet, needed for the real build's stack
 
-Cloudflare Pages hosting, Sveltia CMS auth, Stripe Checkout, and Formspree
-all need real accounts and credentials before they can be wired up. Nothing
-here can create those accounts; they need to come from whoever owns (or
-will own) each service.
+Netlify hosting, Sveltia CMS auth, Stripe Checkout, and Formspree all need
+real accounts and credentials before they can be wired up. Nothing here can
+create those accounts; they need to come from whoever owns (or will own)
+each service.
+
+**Deviation from the handoff brief, confirmed with the owner 2026-08-24:**
+`MyPozole_Claude_Design_Build_Brief.md` names Cloudflare Pages as the
+hosting target. The owner had already settled on Netlify in an earlier,
+separate back-and-forth and confirmed there's no real reason to switch, so
+this build uses **Netlify**, not Cloudflare Pages. Nothing else in the
+stack (Astro, Sveltia CMS, Stripe, Formspree) depends on which one, so this
+is a one-line swap wherever the brief's wording assumes Cloudflare.

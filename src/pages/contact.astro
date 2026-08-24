@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import site from '../data/site.json';
+---
+<BaseLayout title="Contact | MyPozole" description="Reach MyPozole by phone or email, or find our pickup location.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="label">Contact</p>
+      <h1>Get in touch.</h1>
+    </header>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Call or email</h3>
+        <a href={`tel:${site.phone}`} class="big">{site.phone}</a>
+        <a href={`mailto:${site.email}`} class="big">{site.email}</a>
+      </div>
+      <div class="card">
+        <h3>Pickup</h3>
+        <p>{site.productionKitchen.address}</p>
+        <p class="note">{site.productionKitchen.label}</p>
+      </div>
+      <div class="card">
+        <h3>Follow along</h3>
+        <a href={site.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href={site.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href={site.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a>
+      </div>
+    </div>
+
+    <p class="office-note">Office: {site.officeWarehouse.address}</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-head { padding: var(--space-6) 0 var(--space-3); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); margin-bottom: var(--space-3); }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--line); border-radius: 4px; padding: var(--space-3); background: var(--paper); }
+  .card h3 { margin-bottom: var(--space-2); }
+  .card a.big { display: block; font-size: 17px; font-weight: 600; color: var(--rust); text-decoration: none; margin-bottom: 6px; }
+  .card a.big:hover { text-decoration: underline; }
+  .card a { display: block; text-decoration: none; color: var(--terracotta); font-weight: 600; margin-bottom: 6px; }
+  .card p { font-size: 15px; opacity: 0.8; margin-bottom: 6px; }
+  .note { font-size: 13px; opacity: 0.6; }
+  .office-note { font-size: 12.5px; opacity: 0.5; padding-bottom: var(--space-6); }
+</style>

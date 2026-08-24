@@ -1,0 +1,60 @@
+---
+import site from '../data/site.json';
+---
+<nav>
+  <div class="wrap nav-in">
+    <a href="/" class="logo">
+      <img src="/logo.png" alt="MyPozole" width="44" height="44" />
+      <span class="logo-txt">My<span>Pozole</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="has-drop">
+        <a href="/catering/home">Catering</a>
+        <ul class="drop">
+          <li><a href="/catering/home">Home Catering</a></li>
+          <li><a href="/catering/office">Office Catering</a></li>
+          <li><a href="/catering/events">Events Catering</a></li>
+        </ul>
+      </li>
+      <li><a href="/where-to-buy">Where to buy</a></li>
+      <li><a href="/menu">Menu</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <a href={`tel:${site.phone}`} class="nav-cta">{site.phone}</a>
+  </div>
+</nav>
+
+<style>
+  nav {
+    position: sticky; top: 0; z-index: 60;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 76px; gap: var(--space-3); }
+  .logo { display: flex; align-items: center; gap: 11px; text-decoration: none; flex-shrink: 0; }
+  .logo img { width: 44px; height: 44px; border-radius: 50%; }
+  .logo-txt { font-family: var(--serif); font-weight: 900; font-size: 22px; color: var(--brown); letter-spacing: -0.03em; }
+  .logo-txt span { color: var(--terracotta); }
+  .nav-links { display: flex; gap: var(--space-4); list-style: none; margin-left: auto; }
+  .nav-links > li { position: relative; }
+  .nav-links a { color: var(--brown); text-decoration: none; font-size: 14.5px; font-weight: 500; opacity: 0.72; transition: opacity 0.15s; }
+  .nav-links > li > a:hover { opacity: 1; }
+  .has-drop .drop {
+    display: none; position: absolute; top: 100%; left: 0; margin-top: var(--space-1);
+    background: var(--paper); border: 1px solid var(--line); border-radius: 4px;
+    padding: var(--space-1) 0; min-width: 180px; list-style: none;
+    box-shadow: 0 8px 24px rgba(81, 26, 11, 0.12);
+  }
+  .has-drop:hover .drop, .has-drop:focus-within .drop { display: block; }
+  .drop li { display: block; }
+  .drop a { display: block; padding: 9px 16px; opacity: 0.85; }
+  .drop a:hover { background: var(--paper-warm); opacity: 1; }
+  .nav-cta {
+    background: var(--terracotta); color: #fff; text-decoration: none;
+    font-size: 14px; font-weight: 600; padding: 11px 20px; border-radius: 3px;
+    transition: background 0.15s; white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--rust); }
+  @media (max-width: 940px) { .nav-links { display: none; } }
+</style>

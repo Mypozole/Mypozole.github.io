@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import photoPozole from '../assets/photos/menu_pozole.jpg';
+import photoBurrito from '../assets/photos/menu_burrito.jpg';
+import photoPoznachos from '../assets/photos/menu_poznachos.jpg';
+
+const items = (await getCollection('menuItems')).sort((a, b) => a.data.order - b.data.order);
+
+const photos: Record<string, ImageMetadata> = {
+  'pozole': photoPozole,
+  'pozole-burrito': photoBurrito,
+  'poznachos': photoPoznachos,
+};
+---
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">At the market</p>
+      <h2>Five ways to eat it.</h2>
+      <p>Served hot and ready at the trailer and the farmers markets. Every item is finished by you at the toppings table.</p>
+    </div>
+    <div class="menu-grid">
+      {items.map((item) => {
+        const photo = photos[item.id];
+        const isDeliverable = item.data.fulfillment === 'delivery-or-pickup';
+        return (
+          <article class="item">
+            <div class="ph">
+              {photo ? (
+                <Image src={photo} alt={item.data.name} width={400} height={400} />
+              ) : (
+                <span class="ph-label">{item.data.name}</span>
+              )}
+            </div>
+            <div class="txt">
+              <h3>{item.data.name}</h3>
+              <p class="desc">{item.data.description}</p>
+              <p class:list={["path", { deliverable: isDeliverable }]}>
+                {isDeliverable ? 'Delivery or pickup available' : 'Find this at the trailer →'}
+              </p>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .menu-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-2); }
+  @media (max-width: 940px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
+  .item { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .ph {
+    aspect-ratio: 1;
+    background: radial-gradient(90% 80% at 40% 30%, #E8DFCB 0%, transparent 65%), var(--sand-pale);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ph :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .ph-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rust); opacity: 0.55; text-align: center; padding: var(--space-1); }
+  .txt { padding: var(--space-2); }
+  .desc { font-size: 13px; opacity: 0.68; line-height: 1.5; margin-bottom: 10px; }
+  .path { font-size: 11.5px; font-weight: 600; letter-spacing: 0.03em; color: var(--terracotta); }
+  .path.deliverable { color: var(--rust); }
+</style>

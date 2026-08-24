@@ -1,0 +1,42 @@
+---
+import site from '../data/site.json';
+---
+<aside class="rail" id="find">
+  <div class="sched">
+    <div class="sched-head">
+      <h2>Find MyPozole</h2>
+    </div>
+    <div class="sched-body">
+      <p class="pending">
+        This panel reads live from the Farmers Markets, Food Truck, and
+        Pop-up Special Events calendars once connected, showing today's
+        stop with a green dot when we're live, or the next one coming up.
+      </p>
+      <p class="pending-note">Calendar connection not wired up yet.</p>
+      <div class="sched-foot">
+        <a href={`tel:${site.phone}`}>Call {site.phone} for today's location</a>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .rail { position: sticky; top: 96px; }
+  @media (max-width: 1040px) { .rail { position: static; margin-bottom: var(--space-4); } }
+
+  .sched { border: 1.5px solid var(--brown); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .sched-head { background: var(--brown); color: #fff; padding: 15px 18px; }
+  .sched-head h2 {
+    font-family: var(--sans); font-size: 12px; font-weight: 700;
+    letter-spacing: 0.13em; text-transform: uppercase; color: #fff;
+  }
+  .sched-body { padding: var(--space-2) 18px; background: var(--paper-warm); }
+  .pending { font-size: 14.5px; line-height: 1.6; opacity: 0.85; margin-bottom: var(--space-1); }
+  .pending-note {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--rust); opacity: 0.7;
+  }
+  .sched-foot { padding-top: var(--space-2); border-top: 1px solid var(--line); margin-top: var(--space-2); }
+  .sched-foot a { color: var(--rust); font-size: 13.5px; font-weight: 600; text-decoration: none; }
+  .sched-foot a:hover { text-decoration: underline; }
+</style>

@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+const stats = await getCollection('wholesaleStats');
+const order = ['stores-reordering', 'jensens-foods-velocity', 'produced-last-year'];
+const sorted = order.map((id) => stats.find((s) => s.id === id)).filter(Boolean);
+---
+<section class="band" id="wholesale-teaser">
+  <div class="wrap ws">
+    <div>
+      <p class="label">For grocery buyers</p>
+      <h2>Already moving off six shelves.</h2>
+      <p>We make pozole in San Diego and we can make a lot more of it.</p>
+      <a href="/wholesale" class="btn">Wholesale information</a>
+    </div>
+    <div class="ws-facts">
+      {sorted.map((s) => (
+        <div><span>{s!.data.label}</span><b>{s!.data.value}</b></div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .ws { display: grid; grid-template-columns: 1.15fr 1fr; gap: var(--space-6); align-items: center; }
+  @media (max-width: 880px) { .ws { grid-template-columns: 1fr; gap: var(--space-4); } }
+  .ws h2 { margin-bottom: 10px; }
+  .ws > div:first-child p { font-size: 16px; opacity: 0.76; margin-bottom: var(--space-2); }
+  .ws-facts { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .ws-facts div {
+    padding: 15px var(--space-2); border-bottom: 1px solid var(--line-soft);
+    display: flex; justify-content: space-between; gap: var(--space-2); font-size: 14.5px; background: var(--paper);
+  }
+  .ws-facts div:last-child { border-bottom: 0; }
+  .ws-facts span { opacity: 0.65; }
+  .ws-facts b { font-weight: 700; color: var(--rust); text-align: right; }
+</style>

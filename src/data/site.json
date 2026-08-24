@@ -1,0 +1,23 @@
+{
+  "source": "mypozole.com, fetched 2026-08-24",
+  "tagline": "A full Meal in a Bowl",
+  "longTagline": "Sharing our Family Recipe with the world one bowl at a time!",
+  "phone": "858-752-9566",
+  "email": "info@mypozole.com",
+  "social": {
+    "instagram": "https://www.instagram.com/mypozole/",
+    "facebook": "https://www.facebook.com/mypozole/",
+    "twitter": "https://twitter.com/MyPozole",
+    "tiktok": null,
+    "tiktokNote": "Slot ready to activate once Jorge has content flowing (MyPozole_Sitemap.md section 2). No real handle yet."
+  },
+  "productionKitchen": {
+    "address": "8585 Commerce Ave. K8, San Diego, CA 92121",
+    "label": "Pickup by appointment, orders placed online",
+    "note": "Shown clearly as a pickup location only, per MyPozole_Sitemap.md section 8, so nobody arrives expecting to order or shop in person."
+  },
+  "officeWarehouse": {
+    "address": "7955 Silverton Ave. Suite 1204, San Diego, CA 92126",
+    "note": "Not a pickup point. Stays minor, small print only, per MyPozole_Sitemap.md section 8."
+  }
+}
