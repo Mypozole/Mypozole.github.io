@@ -6,7 +6,16 @@ const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 
 const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
 const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail — see caveat in the UI
 ---
-<div class="builder" id="order-builder" data-min={onlineOrdering.minimumDollars} data-delivery-fee={onlineOrdering.deliveryFeeDollars} data-unit-price={estimatedUnitPrice} data-email={site.email}>
+<form
+  class="builder"
+  id="order-builder"
+  novalidate
+  data-min={onlineOrdering.minimumDollars}
+  data-delivery-fee={onlineOrdering.deliveryFeeDollars}
+  data-unit-price={estimatedUnitPrice}
+  data-email={site.email}
+  data-formspree="https://formspree.io/f/xlgyqkpq"
+>
   <div class="row">
     <div class="field">
       <label for="ob-protein">Protein</label>
@@ -46,20 +55,47 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
     {onlineOrdering.fulfillsOnly}
   </p>
 
-  <a id="ob-submit" class="btn" href="#">Email this order</a>
+  <div class="details">
+    <div class="field-stack">
+      <label for="ob-name">First name</label>
+      <input class="inp" id="ob-name" type="text" autocomplete="given-name" />
+      <div class="err">Add your first name.</div>
+    </div>
+    <div class="field-stack">
+      <label for="ob-contact">Email or phone</label>
+      <input class="inp" id="ob-contact" type="text" autocomplete="email" placeholder="jane@email.com or (619) 555-0123" />
+      <div class="err">Add an email or a 10-digit phone number.</div>
+    </div>
+    <div class="field-stack" id="ob-address-field">
+      <label for="ob-address">Delivery address</label>
+      <input class="inp" id="ob-address" type="text" autocomplete="street-address" />
+      <div class="err">We need a delivery address.</div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn submit" id="ob-submit">Send this order</button>
+  <p class="ob-status" id="ob-status"></p>
+</form>
+
+<div class="builder confirm" id="ob-confirm">
+  <div class="check">&#10003;</div>
+  <h3>Order request sent.</h3>
+  <p class="reach" id="ob-reach"></p>
 </div>
 
 <script>
   interface CartLine { protein: string; style: string; qty: number; }
 
   function initOrderBuilder() {
-    const root = document.getElementById('order-builder');
-    if (!root) return;
+    const form = document.getElementById('order-builder') as HTMLFormElement | null;
+    const confirmEl = document.getElementById('ob-confirm');
+    if (!form || !confirmEl) return;
 
-    const minDollars = Number(root.dataset.min);
-    const deliveryFee = Number(root.dataset.deliveryFee);
-    const unitPrice = Number(root.dataset.unitPrice);
-    const email = root.dataset.email;
+    const minDollars = Number(form.dataset.min);
+    const deliveryFee = Number(form.dataset.deliveryFee);
+    const unitPrice = Number(form.dataset.unitPrice);
+    const email = form.dataset.email as string;
+    const formspree = form.dataset.formspree as string;
 
     const proteinSelect = document.getElementById('ob-protein') as HTMLSelectElement;
     const styleSelect = document.getElementById('ob-style') as HTMLSelectElement;
@@ -69,7 +105,12 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
     const emptyEl = document.getElementById('ob-empty') as HTMLElement;
     const totalEl = document.getElementById('ob-total') as HTMLElement;
     const warningEl = document.getElementById('ob-min-warning') as HTMLElement;
-    const submitLink = document.getElementById('ob-submit') as HTMLAnchorElement;
+    const submitBtn = document.getElementById('ob-submit') as HTMLButtonElement;
+    const statusEl = document.getElementById('ob-status') as HTMLElement;
+    const nameInput = document.getElementById('ob-name') as HTMLInputElement;
+    const contactInput = document.getElementById('ob-contact') as HTMLInputElement;
+    const addressInput = document.getElementById('ob-address') as HTMLInputElement;
+    const addressField = document.getElementById('ob-address-field') as HTMLElement;
     const fulfillmentRadios = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="ob-fulfillment"]'));
 
     const labels: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan', white: 'White', red: 'Red', green: 'Green' };
@@ -78,6 +119,16 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
 
     function fulfillment(): string {
       return fulfillmentRadios.find((r) => r.checked)?.value ?? 'pickup';
+    }
+    function validEmail(s: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+    function validPhone(s: string) { return s.replace(/\D/g, '').length >= 10; }
+
+    function computeTotal() {
+      const items = cart.reduce((sum, l) => sum + l.qty, 0);
+      const subtotal = cart.reduce((sum, l) => sum + l.qty * unitPrice, 0);
+      const isDelivery = fulfillment() === 'delivery';
+      const total = subtotal + (isDelivery && items > 0 ? deliveryFee : 0);
+      return { items, subtotal, isDelivery, total };
     }
 
     function render() {
@@ -92,33 +143,17 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
         removeBtn.type = 'button';
         removeBtn.className = 'remove';
         removeBtn.textContent = 'Remove';
-        removeBtn.addEventListener('click', () => {
-          cart.splice(i, 1);
-          render();
-        });
+        removeBtn.addEventListener('click', () => { cart.splice(i, 1); render(); });
         li.appendChild(removeBtn);
         cartEl.appendChild(li);
       });
 
-      const items = cart.reduce((sum, l) => sum + l.qty, 0);
-      let subtotal = cart.reduce((sum, l) => sum + l.qty * unitPrice, 0);
-      const isDelivery = fulfillment() === 'delivery';
-      const total = subtotal + (isDelivery && items > 0 ? deliveryFee : 0);
-
+      const { items, subtotal, isDelivery, total } = computeTotal();
       totalEl.textContent = `$${total.toFixed(2)}`;
-
-      if (items > 0 && subtotal < minDollars) {
-        warningEl.textContent = `$${minDollars} order minimum, add $${(minDollars - subtotal).toFixed(2)} more.`;
-      } else {
-        warningEl.textContent = '';
-      }
-
-      const lines = cart.map((l) => `${l.qty} x ${labels[l.protein]} ${labels[l.style]}`).join('\n');
-      const subject = encodeURIComponent('Online Pozole order');
-      const body = encodeURIComponent(
-        `${lines || '(no items added)'}\n\nFulfillment: ${isDelivery ? 'Delivery' : 'Pickup'}\nEstimated total: $${total.toFixed(2)}\n\n(This is an estimate, not a confirmed order or charge.)`
-      );
-      submitLink.href = `mailto:${email}?subject=${subject}&body=${body}`;
+      warningEl.textContent = items > 0 && subtotal < minDollars
+        ? `$${minDollars} order minimum, add $${(minDollars - subtotal).toFixed(2)} more.`
+        : '';
+      addressField.style.display = isDelivery ? 'block' : 'none';
     }
 
     addBtn.addEventListener('click', () => {
@@ -127,8 +162,59 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
       qtyInput.value = '1';
       render();
     });
-
     fulfillmentRadios.forEach((r) => r.addEventListener('change', render));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const { items, subtotal, isDelivery, total } = computeTotal();
+      const name = nameInput.value.trim();
+      const contact = contactInput.value.trim();
+      const address = addressInput.value.trim();
+      const contactOk = validEmail(contact) || validPhone(contact);
+
+      const errors: string[] = [];
+      if (items === 0) errors.push('Add at least one item to your order.');
+      if (subtotal < minDollars) errors.push(`$${minDollars} order minimum not met.`);
+      if (!name) errors.push('name');
+      if (!contactOk) errors.push('contact');
+      if (isDelivery && !address) errors.push('address');
+      nameInput.closest('.field-stack')?.classList.toggle('invalid', !name);
+      contactInput.closest('.field-stack')?.classList.toggle('invalid', !contactOk);
+      addressField.classList.toggle('invalid', isDelivery && !address);
+      if (errors.length > 0) {
+        statusEl.textContent = items === 0 ? 'Add at least one item first.' : 'Please fill in the highlighted fields.';
+        return;
+      }
+
+      const lines = cart.map((l) => `${l.qty} x ${labels[l.protein]} ${labels[l.style]}`).join('\n');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      try {
+        const res = await fetch(formspree, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            _subject: `Online Pozole order from ${name}`,
+            Items: lines,
+            Fulfillment: isDelivery ? 'Delivery' : 'Pickup',
+            'Delivery address': isDelivery ? address : 'N/A (pickup)',
+            'Estimated total': `$${total.toFixed(2)} (estimate, not confirmed or charged)`,
+            'First name': name,
+            Contact: contact,
+          }),
+        });
+        if (!res.ok) throw new Error('Formspree responded ' + res.status);
+        document.getElementById('ob-reach')!.innerHTML = `We'll confirm your order and the final price at <strong>${contact}</strong>. Nothing is charged now.`;
+        form.style.display = 'none';
+        confirmEl.style.display = 'flex';
+      } catch (err) {
+        console.error('Online order submission failed', err);
+        statusEl.textContent = `Something went wrong. Please email your order to ${email}.`;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send this order';
+      }
+    });
 
     render();
   }
@@ -170,5 +256,24 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
   .total b { font-family: var(--serif); font-size: 28px; color: var(--rust); font-variant-numeric: tabular-nums; }
   .min-warning { font-size: 12.5px; color: var(--rust); font-weight: 600; min-height: 1em; }
   .fine { font-size: 12px; opacity: 0.55; }
-  #ob-submit { text-align: center; }
+
+  .details { display: grid; gap: 10px; padding-top: var(--space-1); border-top: 1px dashed var(--line); }
+  .field-stack label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .field-stack .inp {
+    width: 100%; font-family: var(--sans); font-size: 14.5px; padding: 9px 10px;
+    border: 1.5px solid var(--line); border-radius: 3px; background: var(--paper); color: var(--brown);
+  }
+  .field-stack .err { color: var(--rust); font-size: 11.5px; margin-top: 3px; display: none; }
+  .field-stack.invalid .inp { border-color: var(--rust); }
+  .field-stack.invalid .err { display: block; }
+  #ob-address-field { display: none; }
+
+  .submit { width: 100%; }
+  .submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .ob-status { font-size: 12.5px; color: var(--rust); text-align: center; min-height: 1.2em; }
+
+  .confirm { display: none; flex-direction: column; text-align: center; }
+  .confirm .check { width: 52px; height: 52px; border-radius: 50%; background: var(--terracotta); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px; }
+  .confirm h3 { font-family: var(--serif); font-size: 19px; font-weight: 900; margin-bottom: 10px; }
+  .confirm .reach { font-size: 14px; opacity: 0.8; }
 </style>
