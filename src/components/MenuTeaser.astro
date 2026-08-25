@@ -1,9 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import photoPozole from '../assets/photos/menu_pozole.jpg';
-import photoBurrito from '../assets/photos/menu_burrito.jpg';
-import photoPoznachos from '../assets/photos/menu_poznachos.jpg';
+import photoPozole from '../assets/photos/pozole.jpg';
+import photoBurrito from '../assets/photos/burrito.jpg';
+import photoPoznachos from '../assets/photos/poznachos.jpg';
+import photoPozfrito from '../assets/photos/pozfrito.jpg';
 
 const items = (await getCollection('menuItems')).sort((a, b) => a.data.order - b.data.order);
 
@@ -11,6 +12,7 @@ const photos: Record<string, ImageMetadata> = {
   'pozole': photoPozole,
   'pozole-burrito': photoBurrito,
   'poznachos': photoPoznachos,
+  'pozfrito': photoPozfrito,
 };
 ---
 <section id="menu">

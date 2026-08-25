@@ -71,6 +71,21 @@ of the Burrito with salsa being added. The handoff packet's `/photos` folder
 has logo, an overhead hero bowl shot, and burrito/poznachos/pozole menu
 shots only, no Pozfrito photo at all yet.
 
+**Trust issue, flagged 2026-08-24:** START_HERE.md states as a hard rule
+that every photo in the packet is real, no AI-generated images. The owner
+(and Jorge) flagged the packet's `hero_overhead_bowl.jpg` AND
+`menu_burrito.jpg` AND `menu_pozole.jpg` as reading like AI-generated
+images, despite that claim, that's 3 of the packet's 4 non-logo photos.
+**None of the handoff packet's `/photos` are in use anymore.** All menu
+and hero photos were reverted to the earlier mockup build's set
+(`src/assets/photos/hero.jpg`, `burrito.jpg`, `pozole.jpg`,
+`poznachos.jpg`, `pozfrito.jpg`, recovered from git history at commit
+16622fe), which Jorge had already reviewed and preferred anyway. Poztada
+still has no photo in either set, still a placeholder. Do not pull any
+photo back in from the handoff packet without the owner or Jorge
+explicitly re-confirming it looks real first, the packet's own
+self-certification is not reliable here.
+
 ## Not in this packet, needed for the real build's stack
 
 Netlify hosting, Sveltia CMS auth, Stripe Checkout, and Formspree all need
