@@ -3,88 +3,261 @@ import cateringData from '../data/catering-pricing.json';
 import site from '../data/site.json';
 const d = cateringData.dropOff;
 ---
-<div class="builder" id="quote-builder" data-price-per-quart={d.pricePerQuart} data-min-quarts={d.minimumQuarts} data-min-dollars={d.minimumDollars} data-email={site.email}>
-  <div class="field">
-    <label for="qb-quarts">How many quarts?</label>
-    <input type="number" id="qb-quarts" min={d.minimumQuarts} step="1" value={d.minimumQuarts} />
-    <p class="hint">{d.minimumQuarts}-quart minimum.</p>
+<form
+  class="calc"
+  id="quote-builder"
+  novalidate
+  data-price-per-quart={d.pricePerQuart}
+  data-min-quarts={d.minimumQuarts}
+  data-large-min="51"
+  data-email={site.email}
+  data-formspree="https://formspree.io/f/xlgyqkpq"
+>
+  <div class="hide-large">
+    <p class="c-eyebrow">Your order</p>
+    <p class="c-h">How many quarts?</p>
+    <p class="c-sub">One quart feeds 2 to 3 people. Start at {d.minimumQuarts} for a small team.</p>
+
+    <div class="stepper">
+      <button type="button" class="step-btn" id="qb-minus" aria-label="Decrease quarts">&minus;</button>
+      <div class="qty-wrap">
+        <input class="qty" id="qb-quarts" type="number" inputmode="numeric" value={d.minimumQuarts} min={d.minimumQuarts} aria-label="Number of quarts" />
+        <div class="qty-label">quarts</div>
+      </div>
+      <button type="button" class="step-btn" id="qb-plus" aria-label="Increase quarts">+</button>
+    </div>
+
+    <div class="readout">
+      <div class="total" id="qb-total">${d.minimumDollars}</div>
+      <div class="priceline">Simple, flat pricing. ${d.pricePerQuart} a quart, no surprises.</div>
+      <div class="feeds" id="qb-feeds"></div>
+      <div class="lead-t" id="qb-lead"></div>
+    </div>
+
+    <div class="flavor">Pork, chicken, or vegan, or any mix. Your flavor split is confirmed when we accept your order.</div>
+
+    <div class="quote">
+      <p>&ldquo;All our employees are still raving about the delicious pozole you made for us. It was such a huge hit with the team.&rdquo;</p>
+      <div class="attr">&mdash; Sofia E., Corporate Catering</div>
+    </div>
+
+    <div class="details">
+      <div class="field">
+        <label for="qb-name">First name</label>
+        <input class="inp" id="qb-name" type="text" autocomplete="given-name" placeholder="Jane" />
+        <div class="err">Please add your first name.</div>
+      </div>
+      <div class="field">
+        <label for="qb-contact">Best way to reach you (email or cell)</label>
+        <input class="inp" id="qb-contact" type="text" autocomplete="email" placeholder="jane@company.com or (619) 555-0123" />
+        <div class="err">Add an email or a 10-digit cell number.</div>
+      </div>
+      <div class="field">
+        <label for="qb-address">Delivery address</label>
+        <input class="inp" id="qb-address" type="text" autocomplete="street-address" placeholder="Street, suite, city, ZIP" />
+        <div class="err">We need a delivery address.</div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="qb-date">Date</label>
+          <input class="inp" id="qb-date" type="date" />
+          <div class="err">Pick a delivery date.</div>
+        </div>
+        <div class="field">
+          <label for="qb-time">Preferred time</label>
+          <select class="inp" id="qb-time">
+            <option value="">Select</option>
+            <option>11:00 AM</option>
+            <option>12:00 PM</option>
+            <option>1:00 PM</option>
+            <option>Other</option>
+          </select>
+          <div class="err">Pick a time.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="qb-notes">Anything else we should know? <span class="opt">(optional)</span></label>
+        <textarea class="inp" id="qb-notes" rows="2" placeholder="Allergies, gate code, on-site contact..."></textarea>
+      </div>
+      <div class="field">
+        <label for="qb-textback">Want a text back instead? Leave your number. <span class="opt">(optional)</span></label>
+        <input class="inp" id="qb-textback" type="tel" autocomplete="tel" placeholder="(619) 555-0123" />
+      </div>
+      <button type="submit" class="btn submit" id="qb-submit">Send My Order Request</button>
+      <div class="note" id="qb-note"></div>
+      <div class="simple">Free delivery. No deposit. You only pay once we confirm.</div>
+    </div>
   </div>
 
-  <div class="field">
-    <label for="qb-protein">Protein</label>
-    <select id="qb-protein">
-      <option value="Pork">Pork</option>
-      <option value="Chicken">Chicken</option>
-      <option value="Vegan">Vegan</option>
-      <option value="Mixed, tell us the split">Mixed, I'll specify the split</option>
-    </select>
+  <div class="large">
+    <h4>For orders feeding 100+ people, let's talk directly.</h4>
+    <p>Big group? We'll build the right plan with you: quantities, timing, and a custom quote.</p>
+    <a id="qb-large-cta" class="btn" href="#">Email us about your event</a>
   </div>
+</form>
 
-  <div class="field">
-    <label for="qb-date">When do you need it?</label>
-    <input type="date" id="qb-date" />
-    <p class="hint" id="qb-lead-note"></p>
-  </div>
-
-  <div class="total">
-    <span>Estimated total</span>
-    <b id="qb-total">${d.minimumDollars}</b>
-  </div>
-
-  <a id="qb-submit" class="btn" href="#">Email this order</a>
-  <p class="fine">Sends a pre-filled email, nothing is charged or booked until we confirm back with you.</p>
+<div class="calc confirm" id="qb-confirm">
+  <div class="check">&#10003;</div>
+  <h3>You're in. We have your request.</h3>
+  <div class="summary" id="qb-summary"></div>
+  <div class="reach" id="qb-reach"></div>
+  <div class="direct">Questions before then? Email us at <a id="qb-direct-link" href="#"></a></div>
 </div>
 
 <script>
   function initQuoteBuilder() {
-    const root = document.getElementById('quote-builder');
-    if (!root) return;
+    const form = document.getElementById('quote-builder') as HTMLFormElement | null;
+    const confirmEl = document.getElementById('qb-confirm');
+    if (!form || !confirmEl) return;
 
-    const pricePerQuart = Number(root.dataset.pricePerQuart);
-    const minQuarts = Number(root.dataset.minQuarts);
-    const minDollars = Number(root.dataset.minDollars);
-    const email = root.dataset.email;
+    const PRICE = Number(form.dataset.pricePerQuart);
+    const MIN = Number(form.dataset.minQuarts);
+    const LARGE_MIN = Number(form.dataset.largeMin);
+    const EMAIL = form.dataset.email as string;
+    const FORMSPREE = form.dataset.formspree as string;
 
-    const quartsInput = document.getElementById('qb-quarts') as HTMLInputElement;
-    const proteinSelect = document.getElementById('qb-protein') as HTMLSelectElement;
-    const dateInput = document.getElementById('qb-date') as HTMLInputElement;
-    const totalEl = document.getElementById('qb-total') as HTMLElement;
-    const leadNoteEl = document.getElementById('qb-lead-note') as HTMLElement;
-    const submitLink = document.getElementById('qb-submit') as HTMLAnchorElement;
+    const $ = (id: string) => document.getElementById(id) as HTMLElement;
+    const quarts = $('qb-quarts') as HTMLInputElement;
+    const dateEl = $('qb-date') as HTMLInputElement;
+    const submitBtn = $('qb-submit') as HTMLButtonElement;
 
-    function leadTimeHoursFor(quarts: number): number {
-      if (quarts <= 12) return 24;
-      if (quarts <= 50) return 48;
-      return -1; // above 50, contact directly
+    const mail = `mailto:${EMAIL}`;
+    ($('qb-large-cta') as HTMLAnchorElement).href = `${mail}?subject=Large%20catering%20order%20(50%2B%20quarts)`;
+    const directLink = $('qb-direct-link') as HTMLAnchorElement;
+    directLink.href = mail;
+    directLink.textContent = EMAIL;
+
+    function tier(q: number) {
+      return q <= 12
+        ? { hrs: 24, msg: 'We can have this to you in as little as 24 hours.' }
+        : { hrs: 48, msg: 'Orders this size, we just need 48 hours notice.' };
+    }
+    function fmt(n: number) { return '$' + n.toLocaleString('en-US'); }
+    function pad(n: number) { return (n < 10 ? '0' : '') + n; }
+    function isoPlusDays(days: number) {
+      const x = new Date();
+      x.setHours(0, 0, 0, 0);
+      x.setDate(x.getDate() + Math.ceil(days));
+      return `${x.getFullYear()}-${pad(x.getMonth() + 1)}-${pad(x.getDate())}`;
+    }
+    function getQty() {
+      const v = parseInt(quarts.value, 10);
+      return isNaN(v) ? MIN : v;
     }
 
-    function update() {
-      let quarts = Math.max(minQuarts, Math.floor(Number(quartsInput.value) || minQuarts));
-      quartsInput.value = String(quarts);
+    function render() {
+      const q = getQty();
+      if (q >= LARGE_MIN) {
+        form.classList.add('is-large');
+        return;
+      }
+      form.classList.remove('is-large');
+      const t = tier(q);
+      $('qb-total').textContent = fmt(q * PRICE);
+      $('qb-feeds').textContent = `Feeds approximately ${q * 2} to ${q * 3} people`;
+      $('qb-lead').textContent = t.msg;
+      $('qb-note').textContent = `We'll confirm your order within ${t.hrs} hours based on your order size. You'll hear from us at the contact info you provided. Nothing is charged now.`;
+      dateEl.min = isoPlusDays(t.hrs / 24);
+      if (dateEl.value && dateEl.value < dateEl.min) dateEl.value = '';
+      ($('qb-minus') as HTMLButtonElement).disabled = q <= MIN;
+      validate();
+    }
 
-      const total = Math.max(minDollars, quarts * pricePerQuart);
-      totalEl.textContent = `$${total.toLocaleString()}`;
+    function clampBlur() {
+      const v = parseInt(quarts.value, 10);
+      quarts.value = String(isNaN(v) || v < MIN ? MIN : v);
+      render();
+    }
 
-      const hours = leadTimeHoursFor(quarts);
-      if (hours === -1) {
-        leadNoteEl.textContent = 'Above 50 quarts, contact us directly rather than picking a date here.';
-      } else {
-        leadNoteEl.textContent = `Needs at least ${hours} hours notice.`;
+    $('qb-minus').addEventListener('click', () => { quarts.value = String(Math.max(MIN, getQty() - 1)); render(); });
+    $('qb-plus').addEventListener('click', () => { quarts.value = String(getQty() + 1); render(); });
+    quarts.addEventListener('input', render);
+    quarts.addEventListener('blur', clampBlur);
+
+    function validEmail(s: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+    function validPhone(s: string) { return s.replace(/\D/g, '').length >= 10; }
+    function fieldOf(id: string) { return $(id).closest('.field') as HTMLElement; }
+
+    function required() {
+      const q = getQty();
+      const name = ($('qb-name') as HTMLInputElement).value.trim();
+      const contact = ($('qb-contact') as HTMLInputElement).value.trim();
+      const addr = ($('qb-address') as HTMLInputElement).value.trim();
+      const date = dateEl.value;
+      const time = ($('qb-time') as HTMLSelectElement).value;
+      const cOk = validEmail(contact) || validPhone(contact);
+      return {
+        ok: !!(name && cOk && addr && date && time && q >= MIN && q < LARGE_MIN),
+        name: !!name, contact: cOk, addr: !!addr, date: !!date, time: !!time,
+      };
+    }
+    function validate() { submitBtn.disabled = !required().ok; }
+    ['qb-name', 'qb-contact', 'qb-address', 'qb-date', 'qb-time'].forEach((id) => {
+      $(id).addEventListener('input', validate);
+      $(id).addEventListener('change', validate);
+    });
+    function markErrors(r: ReturnType<typeof required>) {
+      ([['qb-name', r.name], ['qb-contact', r.contact], ['qb-address', r.addr], ['qb-date', r.date], ['qb-time', r.time]] as [string, boolean][])
+        .forEach(([id, ok]) => fieldOf(id).classList.toggle('invalid', !ok));
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const r = required();
+      if (!r.ok) { markErrors(r); return; }
+
+      const q = getQty();
+      const t = tier(q);
+      const payload = {
+        _subject: `New Catering Request, ${dateEl.value}, ${q} quarts`,
+        Quarts: `${q} (${q * 2} to ${q * 3} people)`,
+        Total: fmt(q * PRICE) + '.00',
+        Date: dateEl.value,
+        Time: ($('qb-time') as HTMLSelectElement).value,
+        'Delivery address': ($('qb-address') as HTMLInputElement).value.trim(),
+        'First name': ($('qb-name') as HTMLInputElement).value.trim(),
+        Contact: ($('qb-contact') as HTMLInputElement).value.trim(),
+        'Text-back number': ($('qb-textback') as HTMLInputElement).value.trim() || 'None',
+        Notes: ($('qb-notes') as HTMLTextAreaElement).value.trim() || 'None',
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      function showConfirm() {
+        const rows: [string, string][] = [
+          ['Quarts', `${q}  (${q * 2}-${q * 3} people)`],
+          ['Total', fmt(q * PRICE) + '.00'],
+          ['Date', dateEl.value],
+          ['Time', ($('qb-time') as HTMLSelectElement).value],
+          ['Delivery to', ($('qb-address') as HTMLInputElement).value.trim()],
+        ];
+        $('qb-summary').innerHTML = rows.map(([label, val]) => `<div class="srow"><span class="slabel">${label}</span><span class="sval">${val}</span></div>`).join('');
+        $('qb-reach').innerHTML = `We'll reach out to confirm within <strong>${t.hrs} hours</strong> at <strong>${payload.Contact}</strong>.`;
+        form.style.display = 'none';
+        confirmEl.style.display = 'flex';
       }
 
-      const protein = proteinSelect.value;
-      const dateVal = dateInput.value || '(date not set)';
-      const subject = encodeURIComponent('Catering drop-off order');
-      const body = encodeURIComponent(
-        `Quarts: ${quarts}\nProtein: ${protein}\nNeeded by: ${dateVal}\nEstimated total: $${total.toLocaleString()}\n\n(This is an estimate, not a confirmed booking.)`
-      );
-      submitLink.href = `mailto:${email}?subject=${subject}&body=${body}`;
-    }
+      try {
+        const res = await fetch(FORMSPREE, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          showConfirm();
+        } else {
+          throw new Error('Formspree responded ' + res.status);
+        }
+      } catch (err) {
+        console.error('Catering order submission failed', err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send My Order Request';
+        alert(`Something went wrong sending your request. Please email us at ${EMAIL}.`);
+      }
+    });
 
-    quartsInput.addEventListener('input', update);
-    proteinSelect.addEventListener('change', update);
-    dateInput.addEventListener('change', update);
-    update();
+    render();
   }
 
   initQuoteBuilder();
@@ -92,23 +265,77 @@ const d = cateringData.dropOff;
 </script>
 
 <style>
-  .builder {
-    border: 1.5px solid var(--terracotta); border-radius: 4px; padding: var(--space-3);
-    background: var(--paper); display: grid; gap: var(--space-2); margin-bottom: var(--space-3);
+  .calc {
+    max-width: 520px; margin: 0 auto var(--space-3); background: var(--paper); border: 1px solid var(--line);
+    border-radius: 6px; padding: var(--space-4) var(--space-3); box-shadow: 0 4px 20px rgba(81, 26, 11, 0.07);
   }
-  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-  .field input, .field select {
-    width: 100%; font-family: var(--sans); font-size: 15px; padding: 10px 12px;
-    border: 1.5px solid var(--line); border-radius: 3px; background: var(--paper); color: var(--brown);
+  .c-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--terracotta); font-weight: 700; margin-bottom: 4px; }
+  .c-h { font-family: var(--serif); font-size: 22px; font-weight: 900; margin-bottom: 2px; }
+  .c-sub { font-size: 13.5px; color: var(--brown); opacity: 0.6; margin-bottom: var(--space-2); }
+
+  .stepper { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 8px 0; }
+  .step-btn {
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer; background: var(--terracotta);
+    color: #fff; font-size: 28px; font-weight: 700; line-height: 1; display: flex; align-items: center;
+    justify-content: center; transition: transform 0.08s, background 0.15s; flex: 0 0 auto;
   }
-  .field input:focus, .field select:focus { outline: 2px solid var(--terracotta); outline-offset: 1px; }
-  .hint { font-size: 12px; opacity: 0.6; margin-top: 4px; }
-  .total {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding: var(--space-2); background: var(--paper-warm); border-radius: 3px;
+  .step-btn:hover { background: var(--rust); }
+  .step-btn:active { transform: scale(0.93); }
+  .step-btn:disabled { background: var(--sand-pale); color: var(--brown); opacity: 0.5; cursor: not-allowed; }
+  .qty-wrap { text-align: center; min-width: 110px; }
+  .qty {
+    width: 90px; text-align: center; font-family: var(--serif); font-size: 38px; font-weight: 900;
+    color: var(--brown); border: none; background: transparent;
   }
-  .total span { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
-  .total b { font-family: var(--serif); font-size: 28px; color: var(--rust); font-variant-numeric: tabular-nums; }
-  .fine { font-size: 12px; opacity: 0.55; text-align: center; }
-  #qb-submit { text-align: center; }
+  .qty-label { font-size: 12.5px; opacity: 0.6; font-weight: 600; margin-top: -4px; }
+
+  .readout { text-align: center; margin: var(--space-2) 0 2px; }
+  .total { font-family: var(--serif); font-size: 46px; font-weight: 900; color: var(--rust); line-height: 1; font-variant-numeric: tabular-nums; }
+  .priceline { font-size: 12.5px; opacity: 0.6; margin-top: 4px; }
+  .feeds { font-size: 15px; font-weight: 600; margin-top: 8px; }
+  .lead-t { font-size: 12.5px; opacity: 0.6; margin-top: 4px; }
+
+  .flavor { font-size: 12.5px; opacity: 0.6; text-align: center; line-height: 1.55; margin: var(--space-2) 6px 0; padding-top: var(--space-2); border-top: 1px dashed var(--line); }
+  .quote { background: var(--paper-warm); border-radius: 4px; padding: 14px 16px; margin: var(--space-2) 0 0; }
+  .quote p { font-size: 13.5px; font-style: italic; line-height: 1.5; }
+  .quote .attr { font-style: normal; font-weight: 700; font-size: 12.5px; color: var(--terracotta); margin-top: 8px; }
+
+  .details { margin-top: var(--space-3); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+  .field .opt { font-weight: 500; opacity: 0.6; }
+  .inp {
+    width: 100%; padding: 12px 13px; font-size: 15px; font-family: var(--sans); color: var(--brown);
+    background: #fff; border: 1.5px solid var(--line); border-radius: 3px; outline: none; transition: border-color 0.15s;
+  }
+  .inp:focus { border-color: var(--terracotta); }
+  textarea.inp { resize: vertical; min-height: 50px; }
+  .row { display: flex; gap: 12px; }
+  .row .field { flex: 1; }
+  .err { color: var(--rust); font-size: 11.5px; margin-top: 4px; display: none; }
+  .field.invalid .inp { border-color: var(--rust); }
+  .field.invalid .err { display: block; }
+
+  .submit { width: 100%; min-height: 52px; margin-top: 6px; }
+  .submit:disabled { background: var(--sand-pale); color: var(--brown); opacity: 0.6; cursor: not-allowed; }
+  .note { font-size: 12px; opacity: 0.6; text-align: center; margin-top: 10px; line-height: 1.5; min-height: 1em; }
+  .simple { font-size: 12px; color: var(--terracotta); text-align: center; font-weight: 700; margin-top: 10px; }
+
+  .large { display: none; text-align: center; padding: var(--space-3) 10px; }
+  .large h4 { font-family: var(--serif); font-size: 19px; font-weight: 900; margin-bottom: 8px; }
+  .large p { font-size: 13.5px; opacity: 0.65; margin-bottom: var(--space-2); }
+  .calc.is-large .hide-large { display: none; }
+  .calc.is-large .large { display: block; }
+
+  .confirm { display: none; flex-direction: column; text-align: center; }
+  .confirm .check { width: 60px; height: 60px; border-radius: 50%; background: var(--terracotta); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 30px; margin: 0 auto 14px; }
+  .confirm h3 { font-family: var(--serif); font-size: 21px; font-weight: 900; margin-bottom: 14px; }
+  .summary { text-align: left; background: var(--paper-warm); border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px; margin: 0 0 14px; font-size: 13.5px; }
+  .summary .srow { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--line-soft); }
+  .summary .srow:last-child { border-bottom: none; }
+  .summary .slabel { opacity: 0.6; }
+  .summary .sval { font-weight: 700; text-align: right; }
+  .confirm .reach { font-size: 14px; line-height: 1.55; margin-bottom: 14px; }
+  .confirm .direct { font-size: 13px; opacity: 0.6; padding-top: 14px; border-top: 1px dashed var(--line); }
+  .confirm .direct a { color: var(--terracotta); font-weight: 700; text-decoration: none; }
 </style>

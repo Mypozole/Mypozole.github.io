@@ -13,7 +13,6 @@ interface Props {
 }
 
 const { eyebrow, title, intro, otherDoors, showDropOff = true, showPartyPackages = false } = Astro.props;
-const d = cateringData.dropOff;
 const party = cateringData.pozolePartyPackages;
 ---
 <BaseLayout title={`${title} | MyPozole Catering`} description={intro}>
@@ -25,15 +24,10 @@ const party = cateringData.pozolePartyPackages;
     </header>
 
     {showDropOff && (
-      <div class="door lead">
-        <span class="flag">Drop off</span>
-        <p class="price">${d.pricePerQuart} per quart &middot; {d.minimumQuarts} quart minimum (${d.minimumDollars} floor)</p>
-        <p>We deliver hot pozole with all the toppings packed separate. You serve it.</p>
-        <ul>
-          <li>Pork, chicken, or vegan, mix as you like</li>
-          {d.leadTimes.map((lt) => <li>{lt.range}, {lt.notice} notice</li>)}
-          <li>Toppings and salsas included</li>
-        </ul>
+      <div class="builder-section">
+        <p class="label">Build your order</p>
+        <h2>Get a price in 20 seconds.</h2>
+        <p class="builder-lead">Pick your quarts, see your total, send it to us. We confirm within hours. Nothing is charged now.</p>
         <CateringQuoteBuilder />
       </div>
     )}
@@ -63,6 +57,11 @@ const party = cateringData.pozolePartyPackages;
 <style>
   .page-head { padding: var(--space-6) 0 var(--space-3); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
+
+  .builder-section { text-align: center; padding-bottom: var(--space-4); }
+  .builder-section .label { justify-content: center; display: flex; }
+  .builder-section h2 { margin-bottom: 10px; }
+  .builder-lead { font-size: 16px; opacity: 0.72; max-width: 46ch; margin: 0 auto var(--space-3); }
 
   .door {
     border: 1.5px solid var(--line); border-radius: 4px; padding: var(--space-4);

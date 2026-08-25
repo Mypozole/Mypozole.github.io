@@ -2,6 +2,7 @@
 const apiKey = import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY;
 const farmersMarketsId = import.meta.env.PUBLIC_CALENDAR_ID_FARMERS_MARKETS;
 const popupEventsId = import.meta.env.PUBLIC_CALENDAR_ID_POPUP_EVENTS;
+const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
 ---
 <aside class="rail" id="find">
   <div class="sched" id="sched">
@@ -9,7 +10,7 @@ const popupEventsId = import.meta.env.PUBLIC_CALENDAR_ID_POPUP_EVENTS;
       <span class="dot" id="sched-dot" aria-hidden="true"></span>
       <h2>Find MyPozole</h2>
     </div>
-    <div class="sched-body" id="sched-body" data-key={apiKey} data-cal-farmers={farmersMarketsId} data-cal-popup={popupEventsId}>
+    <div class="sched-body" id="sched-body" data-key={apiKey} data-cal-farmers={farmersMarketsId} data-cal-popup={popupEventsId} data-cal-foodtruck={foodTruckId}>
       <p class="loading">Loading this week's stops...</p>
     </div>
   </div>
@@ -49,18 +50,20 @@ const popupEventsId = import.meta.env.PUBLIC_CALENDAR_ID_POPUP_EVENTS;
     const apiKey = body.dataset.key;
     const farmersId = body.dataset.calFarmers;
     const popupId = body.dataset.calPopup;
+    const foodTruckId = body.dataset.calFoodtruck;
 
-    if (!apiKey || !farmersId || !popupId) {
+    if (!apiKey || !farmersId || !popupId || !foodTruckId) {
       body.innerHTML = '<p class="pending">Calendar not configured yet.</p>';
       return;
     }
 
     try {
-      const [farmers, popup] = await Promise.all([
+      const [farmers, popup, foodTruck] = await Promise.all([
         fetchCalendar(farmersId, apiKey),
         fetchCalendar(popupId, apiKey),
+        fetchCalendar(foodTruckId, apiKey),
       ]);
-      const events = [...farmers, ...popup].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
+      const events = [...farmers, ...popup, ...foodTruck].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
       const now = new Date();
       const live = events.find((e) => new Date(e.start) <= now && now <= new Date(e.end));

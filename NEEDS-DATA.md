@@ -67,10 +67,23 @@ these areas.
   directly.
 - **Farmers markets, truck stops, corporate vending sites.** None of these
   are static content, per the brief's own architecture: they come live from
-  Google Calendar (Farmers Markets, Food Truck Public/Private, Pop-up
-  Special Events, Catering Calendar). This is a real integration to build
-  (calendar API + the six-calendar classification test in
-  MyPozole_Calendar_Classification_Guide.md), not a data-entry task.
+  Google Calendar. **Resolved 2026-08-25** for Farmers Markets, Food Truck
+  (Public), and Pop-up Special Events, all three are now live in
+  `src/components/FindMyPozole.astro`, real calendar IDs in Netlify env
+  vars (see [[mypozole_website_setup]]). In Store Demos is wired into
+  `src/pages/where-to-buy.astro` for "next demo" per store, though the
+  calendar is empty right now so nothing shows yet, untested against
+  real data. Catering Calendar stays internal-only, not wired to the site
+  at all, correctly.
+
+  **Still a real problem, flagged 2026-08-25:** the "Food Truck (Public)"
+  calendar (renamed from "MyPozole Food Truck (2)") still contains a
+  "Genetech Inc." (Genentech) event, appearing twice. This is the
+  classification guide's own textbook example of a **private**,
+  restricted-vending stop, not public. Renaming the calendar didn't
+  remove it. As long as it's in this calendar, it will show on the site
+  as if the public can walk up, which the guide says is wrong. Needs to
+  either move to a private calendar or get removed from this one.
 
 ## Catering gaps
 
@@ -87,6 +100,23 @@ The bag itself, both cup sizes at market, a side angle on Poznachos, a shot
 of the Burrito with salsa being added. The handoff packet's `/photos` folder
 has logo, an overhead hero bowl shot, and burrito/poznachos/pozole menu
 shots only, no Pozfrito photo at all yet.
+
+- **Menu photo, Pozole Burrito**: flagged 2026-08-25, the current photo
+  (`src/assets/photos/burrito.jpg`, from the earlier mockup) may itself be
+  AI-generated, not confirmed either way. Needs a real replacement photo.
+- **Menu photo, Pozole**: per MyPozole_Sitemap.md section 5, at-market
+  photography should show a **cup**, not a bowl, since that's how it's
+  actually served there. Current `pozole.jpg` shows a bowl. Needs a real
+  cup photo to be accurate.
+- **Take-home package photos, 2 uploaded 2026-08-25** (Pork Red, Chicken
+  Green pouches), used as placeholders on Where to Buy. Owner flagged
+  these need retouching, added to their to-do list, not urgent.
+- **Take-home package, 9 SKUs coming**: owner is preparing photos for all
+  9 SKUs (pork/chicken/vegan x white/green/red), not just the 2 already
+  uploaded. When those land, `src/pages/where-to-buy.astro`'s photo strip
+  should probably become a per-SKU gallery instead of two hardcoded
+  images, worth restructuring once the full set exists rather than
+  hardcoding a 9th, 10th photo the same way.
 
 **Trust issue, flagged 2026-08-24:** START_HERE.md states as a hard rule
 that every photo in the packet is real, no AI-generated images. The owner

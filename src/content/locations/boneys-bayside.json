@@ -1,8 +1,8 @@
 {
   "name": "Boney's Bayside Market",
   "type": "store",
-  "city": "San Diego",
+  "city": "Coronado",
   "address": null,
   "mapsLink": "https://maps.app.goo.gl/JXnr5WAMFLEKDzqAA",
-  "source": "mypozole.com/retail, fetched 2026-08-24. Page gives city only, not a specific neighborhood."
+  "source": "mypozole.com/retail gave city only ('San Diego'); owner corrected to Coronado 2026-08-25."
 }

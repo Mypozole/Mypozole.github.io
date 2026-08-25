@@ -11,9 +11,10 @@ const locations = await getCollection('locations');
     </div>
     <div class="stores">
       {locations.map((loc) => (
-        <a href={loc.data.mapsLink ?? '/where-to-buy'} target="_blank" rel="noopener noreferrer" class="store">
+        <a href={`/where-to-buy#${loc.id}`} class="store">
           <h3>{loc.data.name}</h3>
           <p class="city">{loc.data.city}</p>
+          <span class="see-stock">See stock &amp; directions →</span>
         </a>
       ))}
     </div>
@@ -31,6 +32,7 @@ const locations = await getCollection('locations');
   }
   .store:hover { border-color: var(--tan); }
   .store h3 { font-size: 18px; margin-bottom: 2px; }
-  .store .city { font-size: 13px; opacity: 0.6; }
+  .store .city { font-size: 13px; opacity: 0.6; margin-bottom: 8px; }
+  .see-stock { display: block; font-size: 12px; font-weight: 600; color: var(--terracotta); }
   .see-all { display: inline-block; }
 </style>
