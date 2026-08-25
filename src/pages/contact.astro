@@ -29,8 +29,69 @@ import site from '../data/site.json';
     </div>
 
     <p class="office-note">Office: {site.officeWarehouse.address}</p>
+
+    <div class="form-wrap">
+      <h2>Send us a message</h2>
+      <form id="contact-form" novalidate data-formspree="https://formspree.io/f/xlgyqkpq" data-email={site.email}>
+        <div class="field">
+          <label for="cf-name">Name</label>
+          <input class="inp" id="cf-name" type="text" autocomplete="name" required />
+        </div>
+        <div class="field">
+          <label for="cf-contact">Email or phone</label>
+          <input class="inp" id="cf-contact" type="text" autocomplete="email" placeholder="jane@email.com or (619) 555-0123" required />
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea class="inp" id="cf-message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn" id="cf-submit">Send message</button>
+        <p class="cf-status" id="cf-status"></p>
+      </form>
+    </div>
   </div>
 </BaseLayout>
+
+<script>
+  function initContactForm() {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form) return;
+    const endpoint = form.dataset.formspree as string;
+    const email = form.dataset.email as string;
+    const submitBtn = document.getElementById('cf-submit') as HTMLButtonElement;
+    const status = document.getElementById('cf-status') as HTMLElement;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = (document.getElementById('cf-name') as HTMLInputElement).value.trim();
+      const contact = (document.getElementById('cf-contact') as HTMLInputElement).value.trim();
+      const message = (document.getElementById('cf-message') as HTMLTextAreaElement).value.trim();
+      if (!name || !contact || !message) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ _subject: `Contact form message from ${name}`, Name: name, Contact: contact, Message: message }),
+        });
+        if (!res.ok) throw new Error('Formspree responded ' + res.status);
+        status.textContent = "Sent. We'll get back to you soon.";
+        form.reset();
+        submitBtn.textContent = 'Send message';
+        submitBtn.disabled = false;
+      } catch (err) {
+        console.error('Contact form submission failed', err);
+        status.textContent = `Something went wrong. Please email us directly at ${email}.`;
+        submitBtn.textContent = 'Send message';
+        submitBtn.disabled = false;
+      }
+    });
+  }
+  initContactForm();
+  document.addEventListener('astro:page-load', initContactForm);
+</script>
 
 <style>
   .page-head { padding: var(--space-6) 0 var(--space-3); }
@@ -43,5 +104,17 @@ import site from '../data/site.json';
   .card a { display: block; text-decoration: none; color: var(--terracotta); font-weight: 600; margin-bottom: 6px; }
   .card p { font-size: 15px; opacity: 0.8; margin-bottom: 6px; }
   .note { font-size: 13px; opacity: 0.6; }
-  .office-note { font-size: 12.5px; opacity: 0.5; padding-bottom: var(--space-6); }
+  .office-note { font-size: 12.5px; opacity: 0.5; margin-bottom: var(--space-4); }
+
+  .form-wrap { max-width: 480px; padding-bottom: var(--space-6); }
+  .form-wrap h2 { margin-bottom: var(--space-2); }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
+  .inp {
+    width: 100%; padding: 12px 13px; font-size: 15px; font-family: var(--sans); color: var(--brown);
+    background: #fff; border: 1.5px solid var(--line); border-radius: 3px; outline: none; transition: border-color 0.15s;
+  }
+  .inp:focus { border-color: var(--terracotta); }
+  textarea.inp { resize: vertical; }
+  .cf-status { font-size: 13px; opacity: 0.7; margin-top: var(--space-2); min-height: 1.2em; }
 </style>
