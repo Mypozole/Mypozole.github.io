@@ -7,10 +7,12 @@ these areas.
 
 ## Blocking-ish (referenced by multiple pages)
 
-- **Toppings.** No verified list of topping names, which are included vs.
-  extra, or extra pricing anywhere in the handoff packet. `src/content/toppings/`
-  is an empty collection until this exists. Feeds the Toppings builder and
-  the catering configurator.
+- ~~**Toppings.**~~ **Resolved 2026-08-25.** Real photos of the actual
+  pouch label (found in Drive) list the topping set directly: cabbage,
+  radishes, onions, jalapeños, cilantro, oregano, red pepper flakes,
+  limes, avocado. Now in `src/content/toppings/`. Still no per-topping
+  price (label just says "toppings not included," customer supplies
+  them), that part is still unconfirmed.
 - **Testimonials.** The brief says the reviews strip should be a live widget
   pulled from Google/Yelp, not static copy, so `src/content/testimonials/`
   is intentionally empty. If a static fallback is ever wanted, it needs real
@@ -28,11 +30,26 @@ these areas.
   section or footnote), not a featured block.
 - **16oz cup price**: the $15.99 verified from mypozole.com/retail is for the
   32oz retail pouch. No cup price is given anywhere.
+- **Online-order per-unit price**: the Menu page's order builder
+  (`src/components/OnlineOrderBuilder.astro`) uses the $15.99 retail
+  pouch price as a labeled estimate, since no confirmed price exists for
+  the "32oz Prepackaged" hot online-order container specifically. May or
+  may not be the same price as the retail pouch, confirm before this
+  becomes a real checkout.
 - **Cup serving-size fix**: the brief flags that Chicken White's cup label
   wrongly lists "1 Cup (473mL)" (volume-based) instead of "1 Cup (454g)"
   like the other two whites. Confirmed as a real production issue, not yet
   reflected in any product record here since cup-format products aren't
   modeled yet.
+- **Pork Red protein conflict, flagged 2026-08-25**: a real photo of the
+  actual pouch label shows 24g protein per serving. The handoff brief's
+  nutrition table says 25g. `src/content/products/pork-red.json` uses the
+  photographed label's 24g as the more direct primary source, but this is
+  a genuine conflict between two sources, not resolved, confirm with Jorge
+  before it's load-bearing anywhere (e.g. a cross-SKU comparison chart).
+  Also worth noting: that same photo shows net weight correctly printed
+  as 907g, so the brief's separate "net weight math is off" warning may
+  already be fixed on this print run, also not fully confirmed.
 
 ## Wholesale record gaps
 
