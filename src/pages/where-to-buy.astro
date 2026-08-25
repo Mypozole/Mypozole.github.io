@@ -1,6 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import photoPorkRed from '../assets/photos/takehome_pork_red.jpg';
+import photoChickenGreen from '../assets/photos/takehome_chicken_green.jpg';
 
 const locations = await getCollection('locations');
 const stock = await getCollection('stock');
@@ -32,6 +35,21 @@ const rows = await Promise.all(
       </p>
     </header>
 
+    <div class="pouches">
+      <div class="pouch-photo">
+        <Image src={photoPorkRed} alt="MyPozole Red Style Pork Pozole pouch, 32oz" width={500} height={667} />
+        <p>Red Style Pork, 24g protein</p>
+      </div>
+      <div class="pouch-photo">
+        <Image src={photoChickenGreen} alt="MyPozole Green Style Chicken Pozole pouch, 32oz" width={500} height={667} />
+        <p>Green Style Chicken, 25g protein</p>
+      </div>
+      <div class="pouch-note">
+        <p><b>What to look for in the freezer aisle.</b></p>
+        <p>Two servings per pouch. Toppings (cabbage, radishes, onions, jalapeños, cilantro, oregano, red pepper flakes, limes, avocado) are not included, add your own at home.</p>
+      </div>
+    </div>
+
     <div class="stores">
       {rows.map(({ loc, chips }) => (
         <article class="store">
@@ -61,6 +79,15 @@ const rows = await Promise.all(
   .page-head { padding: var(--space-6) 0 var(--space-3); }
   .page-head h1 { margin-bottom: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
+
+  .pouches { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: var(--space-2); margin-bottom: var(--space-4); }
+  @media (max-width: 760px) { .pouches { grid-template-columns: 1fr 1fr; } .pouch-note { grid-column: 1 / -1; } }
+  .pouch-photo { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .pouch-photo :global(img) { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+  .pouch-photo p { font-size: 12.5px; font-weight: 600; padding: 10px 12px; opacity: 0.75; }
+  .pouch-note { border: 1px solid var(--line); border-radius: 4px; background: var(--paper-warm); padding: var(--space-3); display: flex; flex-direction: column; justify-content: center; }
+  .pouch-note p:first-child { margin-bottom: 8px; }
+  .pouch-note p { font-size: 13.5px; opacity: 0.75; line-height: 1.55; }
 
   .stores { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin: var(--space-4) 0; }
   @media (max-width: 940px) { .stores { grid-template-columns: repeat(2, 1fr); } }

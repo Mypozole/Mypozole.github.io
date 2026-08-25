@@ -69,6 +69,7 @@ const toppings = defineCollection({
     name: z.string(),
     included: z.boolean(),
     extraPrice: z.number().nullable(),
+    source: z.string(),
   }),
 });
 

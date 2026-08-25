@@ -16,7 +16,7 @@
     "carbGrams": 30,
     "fiberGrams": 5,
     "sugarGrams": 6,
-    "proteinGrams": 25
+    "proteinGrams": 24
   },
-  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2)."
+  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat), per MyPozole_Claude_Design_Build_Brief.md section 2. NOTE: a real photo of the current pouch (2026-08-25) shows net weight correctly printed as 907g, so the 'net weight math is off' issue described in the brief may already be fixed on this print run, not fully confirmed either way. Separately, the same photo shows 24g protein per serving on the physical label, not 25g as transcribed in the brief's nutrition table. Using the photographed label's 24g here as the more direct primary source, flagging the conflict rather than silently picking one, confirm with Jorge which is correct before this becomes load-bearing anywhere (e.g. a comparison chart)."
 }

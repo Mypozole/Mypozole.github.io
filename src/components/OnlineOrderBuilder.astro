@@ -1,0 +1,174 @@
+---
+import onlineOrdering from '../data/online-ordering.json';
+import site from '../data/site.json';
+
+const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 'Green' };
+const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
+const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail — see caveat in the UI
+---
+<div class="builder" id="order-builder" data-min={onlineOrdering.minimumDollars} data-delivery-fee={onlineOrdering.deliveryFeeDollars} data-unit-price={estimatedUnitPrice} data-email={site.email}>
+  <div class="row">
+    <div class="field">
+      <label for="ob-protein">Protein</label>
+      <select id="ob-protein">
+        {Object.entries(proteinLabel).map(([value, label]) => <option value={value}>{label}</option>)}
+      </select>
+    </div>
+    <div class="field">
+      <label for="ob-style">Style</label>
+      <select id="ob-style">
+        {Object.entries(styleLabel).map(([value, label]) => <option value={value}>{label}</option>)}
+      </select>
+    </div>
+    <div class="field qty">
+      <label for="ob-qty">Qty</label>
+      <input type="number" id="ob-qty" min="1" step="1" value="1" />
+    </div>
+    <button type="button" id="ob-add" class="btn add-btn">Add</button>
+  </div>
+
+  <ul id="ob-cart" class="cart"></ul>
+  <p class="empty" id="ob-empty">Nothing added yet.</p>
+
+  <div class="fulfillment">
+    <label><input type="radio" name="ob-fulfillment" value="pickup" checked /> Pickup</label>
+    <label><input type="radio" name="ob-fulfillment" value="delivery" /> Delivery (+${onlineOrdering.deliveryFeeDollars})</label>
+  </div>
+
+  <div class="total">
+    <span>Estimated total</span>
+    <b id="ob-total">$0</b>
+  </div>
+  <p class="min-warning" id="ob-min-warning"></p>
+  <p class="fine">
+    Estimated using the ${estimatedUnitPrice} retail pouch price, the confirmed online-order price per container hasn't
+    been set yet, final total is confirmed when we reply. ${onlineOrdering.minimumDollars} order minimum applies.
+    {onlineOrdering.fulfillsOnly}
+  </p>
+
+  <a id="ob-submit" class="btn" href="#">Email this order</a>
+</div>
+
+<script>
+  interface CartLine { protein: string; style: string; qty: number; }
+
+  function initOrderBuilder() {
+    const root = document.getElementById('order-builder');
+    if (!root) return;
+
+    const minDollars = Number(root.dataset.min);
+    const deliveryFee = Number(root.dataset.deliveryFee);
+    const unitPrice = Number(root.dataset.unitPrice);
+    const email = root.dataset.email;
+
+    const proteinSelect = document.getElementById('ob-protein') as HTMLSelectElement;
+    const styleSelect = document.getElementById('ob-style') as HTMLSelectElement;
+    const qtyInput = document.getElementById('ob-qty') as HTMLInputElement;
+    const addBtn = document.getElementById('ob-add') as HTMLButtonElement;
+    const cartEl = document.getElementById('ob-cart') as HTMLUListElement;
+    const emptyEl = document.getElementById('ob-empty') as HTMLElement;
+    const totalEl = document.getElementById('ob-total') as HTMLElement;
+    const warningEl = document.getElementById('ob-min-warning') as HTMLElement;
+    const submitLink = document.getElementById('ob-submit') as HTMLAnchorElement;
+    const fulfillmentRadios = Array.from(document.querySelectorAll<HTMLInputElement>('input[name="ob-fulfillment"]'));
+
+    const labels: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan', white: 'White', red: 'Red', green: 'Green' };
+
+    let cart: CartLine[] = [];
+
+    function fulfillment(): string {
+      return fulfillmentRadios.find((r) => r.checked)?.value ?? 'pickup';
+    }
+
+    function render() {
+      cartEl.innerHTML = '';
+      emptyEl.style.display = cart.length === 0 ? 'block' : 'none';
+
+      cart.forEach((line, i) => {
+        const li = document.createElement('li');
+        li.className = 'cart-line';
+        li.innerHTML = `<span>${line.qty} &times; ${labels[line.protein]} ${labels[line.style]}</span>`;
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove';
+        removeBtn.textContent = 'Remove';
+        removeBtn.addEventListener('click', () => {
+          cart.splice(i, 1);
+          render();
+        });
+        li.appendChild(removeBtn);
+        cartEl.appendChild(li);
+      });
+
+      const items = cart.reduce((sum, l) => sum + l.qty, 0);
+      let subtotal = cart.reduce((sum, l) => sum + l.qty * unitPrice, 0);
+      const isDelivery = fulfillment() === 'delivery';
+      const total = subtotal + (isDelivery && items > 0 ? deliveryFee : 0);
+
+      totalEl.textContent = `$${total.toFixed(2)}`;
+
+      if (items > 0 && subtotal < minDollars) {
+        warningEl.textContent = `$${minDollars} order minimum, add $${(minDollars - subtotal).toFixed(2)} more.`;
+      } else {
+        warningEl.textContent = '';
+      }
+
+      const lines = cart.map((l) => `${l.qty} x ${labels[l.protein]} ${labels[l.style]}`).join('\n');
+      const subject = encodeURIComponent('Online Pozole order');
+      const body = encodeURIComponent(
+        `${lines || '(no items added)'}\n\nFulfillment: ${isDelivery ? 'Delivery' : 'Pickup'}\nEstimated total: $${total.toFixed(2)}\n\n(This is an estimate, not a confirmed order or charge.)`
+      );
+      submitLink.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+
+    addBtn.addEventListener('click', () => {
+      const qty = Math.max(1, Math.floor(Number(qtyInput.value) || 1));
+      cart.push({ protein: proteinSelect.value, style: styleSelect.value, qty });
+      qtyInput.value = '1';
+      render();
+    });
+
+    fulfillmentRadios.forEach((r) => r.addEventListener('change', render));
+
+    render();
+  }
+
+  initOrderBuilder();
+  document.addEventListener('astro:page-load', initOrderBuilder);
+</script>
+
+<style>
+  .builder {
+    border: 1.5px solid var(--terracotta); border-radius: 4px; padding: var(--space-3);
+    background: var(--paper); display: grid; gap: var(--space-2); margin-bottom: var(--space-3);
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr 80px auto; gap: var(--space-1); align-items: end; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr 1fr; } .row .add-btn { grid-column: 1 / -1; } }
+  .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+  .field select, .field input {
+    width: 100%; font-family: var(--sans); font-size: 14.5px; padding: 9px 10px;
+    border: 1.5px solid var(--line); border-radius: 3px; background: var(--paper); color: var(--brown);
+  }
+  .add-btn { padding: 10px 18px; white-space: nowrap; }
+
+  .cart { list-style: none; display: grid; gap: 6px; }
+  .cart-line {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--paper-warm); padding: 8px 12px; border-radius: 3px; font-size: 14px;
+  }
+  .cart-line .remove { background: none; border: 0; color: var(--rust); font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: underline; }
+  .empty { font-size: 13px; opacity: 0.5; font-style: italic; }
+
+  .fulfillment { display: flex; gap: var(--space-3); font-size: 14px; }
+  .fulfillment label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
+  .total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: var(--space-2); background: var(--paper-warm); border-radius: 3px;
+  }
+  .total span { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
+  .total b { font-family: var(--serif); font-size: 28px; color: var(--rust); font-variant-numeric: tabular-nums; }
+  .min-warning { font-size: 12.5px; color: var(--rust); font-weight: 600; min-height: 1em; }
+  .fine { font-size: 12px; opacity: 0.55; }
+  #ob-submit { text-align: center; }
+</style>
