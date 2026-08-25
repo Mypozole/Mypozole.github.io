@@ -1,0 +1,114 @@
+---
+import cateringData from '../data/catering-pricing.json';
+import site from '../data/site.json';
+const d = cateringData.dropOff;
+---
+<div class="builder" id="quote-builder" data-price-per-quart={d.pricePerQuart} data-min-quarts={d.minimumQuarts} data-min-dollars={d.minimumDollars} data-email={site.email}>
+  <div class="field">
+    <label for="qb-quarts">How many quarts?</label>
+    <input type="number" id="qb-quarts" min={d.minimumQuarts} step="1" value={d.minimumQuarts} />
+    <p class="hint">{d.minimumQuarts}-quart minimum.</p>
+  </div>
+
+  <div class="field">
+    <label for="qb-protein">Protein</label>
+    <select id="qb-protein">
+      <option value="Pork">Pork</option>
+      <option value="Chicken">Chicken</option>
+      <option value="Vegan">Vegan</option>
+      <option value="Mixed, tell us the split">Mixed, I'll specify the split</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="qb-date">When do you need it?</label>
+    <input type="date" id="qb-date" />
+    <p class="hint" id="qb-lead-note"></p>
+  </div>
+
+  <div class="total">
+    <span>Estimated total</span>
+    <b id="qb-total">${d.minimumDollars}</b>
+  </div>
+
+  <a id="qb-submit" class="btn" href="#">Email this order</a>
+  <p class="fine">Sends a pre-filled email, nothing is charged or booked until we confirm back with you.</p>
+</div>
+
+<script>
+  function initQuoteBuilder() {
+    const root = document.getElementById('quote-builder');
+    if (!root) return;
+
+    const pricePerQuart = Number(root.dataset.pricePerQuart);
+    const minQuarts = Number(root.dataset.minQuarts);
+    const minDollars = Number(root.dataset.minDollars);
+    const email = root.dataset.email;
+
+    const quartsInput = document.getElementById('qb-quarts') as HTMLInputElement;
+    const proteinSelect = document.getElementById('qb-protein') as HTMLSelectElement;
+    const dateInput = document.getElementById('qb-date') as HTMLInputElement;
+    const totalEl = document.getElementById('qb-total') as HTMLElement;
+    const leadNoteEl = document.getElementById('qb-lead-note') as HTMLElement;
+    const submitLink = document.getElementById('qb-submit') as HTMLAnchorElement;
+
+    function leadTimeHoursFor(quarts: number): number {
+      if (quarts <= 12) return 24;
+      if (quarts <= 50) return 48;
+      return -1; // above 50, contact directly
+    }
+
+    function update() {
+      let quarts = Math.max(minQuarts, Math.floor(Number(quartsInput.value) || minQuarts));
+      quartsInput.value = String(quarts);
+
+      const total = Math.max(minDollars, quarts * pricePerQuart);
+      totalEl.textContent = `$${total.toLocaleString()}`;
+
+      const hours = leadTimeHoursFor(quarts);
+      if (hours === -1) {
+        leadNoteEl.textContent = 'Above 50 quarts, contact us directly rather than picking a date here.';
+      } else {
+        leadNoteEl.textContent = `Needs at least ${hours} hours notice.`;
+      }
+
+      const protein = proteinSelect.value;
+      const dateVal = dateInput.value || '(date not set)';
+      const subject = encodeURIComponent('Catering drop-off order');
+      const body = encodeURIComponent(
+        `Quarts: ${quarts}\nProtein: ${protein}\nNeeded by: ${dateVal}\nEstimated total: $${total.toLocaleString()}\n\n(This is an estimate, not a confirmed booking.)`
+      );
+      submitLink.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+
+    quartsInput.addEventListener('input', update);
+    proteinSelect.addEventListener('change', update);
+    dateInput.addEventListener('change', update);
+    update();
+  }
+
+  initQuoteBuilder();
+  document.addEventListener('astro:page-load', initQuoteBuilder);
+</script>
+
+<style>
+  .builder {
+    border: 1.5px solid var(--terracotta); border-radius: 4px; padding: var(--space-3);
+    background: var(--paper); display: grid; gap: var(--space-2); margin-bottom: var(--space-3);
+  }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; font-family: var(--sans); font-size: 15px; padding: 10px 12px;
+    border: 1.5px solid var(--line); border-radius: 3px; background: var(--paper); color: var(--brown);
+  }
+  .field input:focus, .field select:focus { outline: 2px solid var(--terracotta); outline-offset: 1px; }
+  .hint { font-size: 12px; opacity: 0.6; margin-top: 4px; }
+  .total {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: var(--space-2); background: var(--paper-warm); border-radius: 3px;
+  }
+  .total span { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
+  .total b { font-family: var(--serif); font-size: 28px; color: var(--rust); font-variant-numeric: tabular-nums; }
+  .fine { font-size: 12px; opacity: 0.55; text-align: center; }
+  #qb-submit { text-align: center; }
+</style>

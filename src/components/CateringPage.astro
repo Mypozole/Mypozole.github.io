@@ -1,17 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CateringQuoteBuilder from './CateringQuoteBuilder.astro';
 import cateringData from '../data/catering-pricing.json';
-import site from '../data/site.json';
 
 interface Props {
   eyebrow: string;
   title: string;
   intro: string;
   otherDoors: { label: string; href: string }[];
+  showDropOff?: boolean;
   showPartyPackages?: boolean;
 }
 
-const { eyebrow, title, intro, otherDoors, showPartyPackages = false } = Astro.props;
+const { eyebrow, title, intro, otherDoors, showDropOff = true, showPartyPackages = false } = Astro.props;
 const d = cateringData.dropOff;
 const party = cateringData.pozolePartyPackages;
 ---
@@ -23,17 +24,19 @@ const party = cateringData.pozolePartyPackages;
       <p class="intro">{intro}</p>
     </header>
 
-    <div class="door lead">
-      <span class="flag">Drop off</span>
-      <p class="price">${d.pricePerQuart} per quart &middot; {d.minimumQuarts} quart minimum (${d.minimumDollars} floor)</p>
-      <p>We deliver hot pozole with all the toppings packed separate. You serve it.</p>
-      <ul>
-        <li>Pork, chicken, or vegan, mix as you like</li>
-        {d.leadTimes.map((lt) => <li>{lt.range}, {lt.notice} notice</li>)}
-        <li>Toppings and salsas included</li>
-      </ul>
-      <a class="btn" href={`mailto:${site.email}?subject=Catering drop-off inquiry`}>Ask about your order</a>
-    </div>
+    {showDropOff && (
+      <div class="door lead">
+        <span class="flag">Drop off</span>
+        <p class="price">${d.pricePerQuart} per quart &middot; {d.minimumQuarts} quart minimum (${d.minimumDollars} floor)</p>
+        <p>We deliver hot pozole with all the toppings packed separate. You serve it.</p>
+        <ul>
+          <li>Pork, chicken, or vegan, mix as you like</li>
+          {d.leadTimes.map((lt) => <li>{lt.range}, {lt.notice} notice</li>)}
+          <li>Toppings and salsas included</li>
+        </ul>
+        <CateringQuoteBuilder />
+      </div>
+    )}
 
     {showPartyPackages && (
       <div class="door">
