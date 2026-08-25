@@ -1,37 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import photoPorkRed from '../assets/photos/takehome_pork_red.jpg';
 import photoChickenGreen from '../assets/photos/takehome_chicken_green.jpg';
 
 const locations = await getCollection('locations');
-const stock = await getCollection('stock');
-
-const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 'Green' };
-const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
-
-const rows = await Promise.all(
-  locations.map(async (loc) => {
-    const stockEntry = stock.find((s) => s.data.locationId === loc.id);
-    const skus = stockEntry?.data.carries ?? [];
-    const products = await Promise.all(skus.map((id) => getEntry('products', id)));
-    const chips = products
-      .filter(Boolean)
-      .map((p) => `${proteinLabel[p!.data.protein]} ${styleLabel[p!.data.style]}`);
-    return { loc, chips };
-  })
-);
 ---
-<BaseLayout title="Where to Buy | MyPozole" description="Every store carrying MyPozole, and what each one has in stock.">
+<BaseLayout title="Where to Buy | MyPozole" description="Every store carrying MyPozole. Click a store to see what's in stock there.">
   <div class="wrap">
     <header class="page-head">
       <p class="label">Where to buy</p>
       <h1>Take home a pouch.</h1>
       <p class="intro">
-        Frozen 32oz pouches, $15.99, ready to heat on the stove. Not every
-        store carries every style, this list shows exactly what's stocked
-        where, so you're not driving over for nothing.
+        Frozen 32oz pouches, $15.99, ready to heat on the stove. Click a
+        store to see exactly what's stocked there before you drive over.
       </p>
     </header>
 
@@ -51,25 +34,19 @@ const rows = await Promise.all(
     </div>
 
     <div class="stores">
-      {rows.map(({ loc, chips }) => (
-        <article class="store" id={loc.id} data-store-name={loc.data.name}>
+      {locations.map((loc) => (
+        <a href={`/where-to-buy/${loc.id}`} class="store" data-store-name={loc.data.name}>
           <h3>{loc.data.name}</h3>
           <p class="city">{loc.data.city}</p>
-          <div class="chips">
-            {chips.length > 0 ? chips.map((c) => <span class="chip">{c}</span>) : <span class="chip empty">Stock not confirmed</span>}
-          </div>
           <p class="next-demo" data-demo-slot></p>
-          {loc.data.mapsLink && (
-            <a href={loc.data.mapsLink} target="_blank" rel="noopener noreferrer" class="directions">Get directions →</a>
-          )}
-        </article>
+          <span class="see-stock">See what's in stock →</span>
+        </a>
       ))}
     </div>
 
     <script define:vars={{ apiKey: import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY, calendarId: import.meta.env.PUBLIC_CALENDAR_ID_IN_STORE_DEMOS }}>
       async function loadNextDemos() {
         if (!apiKey || !calendarId) return;
-        const slots = document.querySelectorAll('[data-demo-slot]');
         try {
           const timeMin = new Date().toISOString();
           const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&singleEvents=true&orderBy=startTime&timeMin=${timeMin}&maxResults=20`;
@@ -81,10 +58,7 @@ const rows = await Promise.all(
           document.querySelectorAll('.store').forEach((store) => {
             const name = store.getAttribute('data-store-name') ?? '';
             const firstWord = name.split(' ')[0].toLowerCase();
-            const match = events.find((e) => {
-              const haystack = `${e.summary ?? ''} ${e.location ?? ''}`.toLowerCase();
-              return haystack.includes(firstWord);
-            });
+            const match = events.find((e) => `${e.summary ?? ''} ${e.location ?? ''}`.toLowerCase().includes(firstWord));
             const slot = store.querySelector('[data-demo-slot]');
             if (match && slot) {
               const date = new Date(match.start.dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -125,15 +99,15 @@ const rows = await Promise.all(
   .stores { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin: var(--space-4) 0; }
   @media (max-width: 940px) { .stores { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) { .stores { grid-template-columns: 1fr; } }
-  .store { background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: var(--space-3); scroll-margin-top: 100px; }
-  .store h3 { margin-bottom: 2px; }
-  .city { font-size: 13px; opacity: 0.6; margin-bottom: var(--space-2); }
-  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: var(--space-2); }
-  .chip { font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--sand-pale); color: var(--rust); }
-  .chip.empty { background: none; border: 1px dashed var(--tan); color: var(--brown); opacity: 0.6; }
-  .next-demo { font-size: 12px; font-weight: 600; color: var(--rust); margin-bottom: var(--space-1); min-height: 1em; }
-  .directions { font-size: 12.5px; font-weight: 600; color: var(--terracotta); text-decoration: none; }
-  .directions:hover { text-decoration: underline; }
+  .store {
+    background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: var(--space-3);
+    text-decoration: none; display: block; transition: border-color 0.15s;
+  }
+  .store:hover { border-color: var(--terracotta); }
+  .store h3 { margin-bottom: 2px; color: var(--brown); }
+  .city { font-size: 13px; opacity: 0.6; margin-bottom: var(--space-1); }
+  .next-demo { font-size: 12px; font-weight: 600; color: var(--rust); min-height: 1em; margin-bottom: var(--space-1); }
+  .see-stock { display: block; font-size: 12.5px; font-weight: 600; color: var(--terracotta); margin-top: var(--space-1); }
 
   .ask {
     margin: var(--space-4) 0 var(--space-6); background: var(--brown); color: #fff; border-radius: 4px; padding: var(--space-4);

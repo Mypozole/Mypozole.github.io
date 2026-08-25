@@ -11,7 +11,7 @@ const locations = await getCollection('locations');
     </div>
     <div class="stores">
       {locations.map((loc) => (
-        <a href={`/where-to-buy#${loc.id}`} class="store">
+        <a href={`/where-to-buy/${loc.id}`} class="store">
           <h3>{loc.data.name}</h3>
           <p class="city">{loc.data.city}</p>
           <span class="see-stock">See stock &amp; directions →</span>

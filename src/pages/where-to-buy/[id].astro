@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import photoPorkRed from '../../assets/photos/takehome_pork_red.jpg';
+import photoChickenGreen from '../../assets/photos/takehome_chicken_green.jpg';
+
+export async function getStaticPaths() {
+  const locations = await getCollection('locations');
+  return locations.map((loc) => ({ params: { id: loc.id }, props: { loc } } as const));
+}
+
+interface Props {
+  loc: Awaited<ReturnType<typeof getCollection<'locations'>>>[number];
+}
+
+const { loc } = Astro.props;
+
+const stock = await getCollection('stock');
+const stockEntry = stock.find((s) => s.data.locationId === loc.id);
+const skuIds = stockEntry?.data.carries ?? [];
+const products = (await Promise.all(skuIds.map((id) => getEntry('products', id)))).filter(Boolean);
+
+const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 'Green' };
+const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
+
+const photos: Record<string, ImageMetadata> = {
+  'pork-red': photoPorkRed,
+  'chicken-green': photoChickenGreen,
+};
+---
+<BaseLayout title={`${loc.data.name} | MyPozole`} description={`What's in stock at ${loc.data.name}, and how to get there.`}>
+  <div class="wrap">
+    <a href="/where-to-buy" class="back">← All stores</a>
+    <header class="page-head">
+      <p class="label">{loc.data.city}</p>
+      <h1>{loc.data.name}</h1>
+      <p class="next-demo" data-demo-slot data-store-name={loc.data.name}></p>
+      {loc.data.mapsLink && (
+        <a href={loc.data.mapsLink} target="_blank" rel="noopener noreferrer" class="btn directions-btn">Get directions →</a>
+      )}
+    </header>
+
+    <h2 class="skus-h">What's in stock here</h2>
+    {products.length === 0 ? (
+      <p class="empty-note">Stock not confirmed for this location yet.</p>
+    ) : (
+      <div class="skus">
+        {products.map((p) => {
+          const photo = photos[p!.id];
+          return (
+            <div class="sku">
+              <div class="sku-photo">
+                {photo ? (
+                  <Image src={photo} alt={`${proteinLabel[p!.data.protein]} ${styleLabel[p!.data.style]} pouch`} width={300} height={400} />
+                ) : (
+                  <span class="sku-placeholder">{proteinLabel[p!.data.protein]} {styleLabel[p!.data.style]}</span>
+                )}
+              </div>
+              <p class="sku-label">{proteinLabel[p!.data.protein]} {styleLabel[p!.data.style]}</p>
+            </div>
+          );
+        })}
+      </div>
+    )}
+
+    <script define:vars={{ apiKey: import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY, calendarId: import.meta.env.PUBLIC_CALENDAR_ID_IN_STORE_DEMOS }}>
+      async function loadNextDemo() {
+        const slot = document.querySelector('[data-demo-slot]');
+        if (!apiKey || !calendarId || !slot) return;
+        const name = slot.getAttribute('data-store-name') ?? '';
+        const firstWord = name.split(' ')[0].toLowerCase();
+        try {
+          const timeMin = new Date().toISOString();
+          const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&singleEvents=true&orderBy=startTime&timeMin=${timeMin}&maxResults=20`;
+          const res = await fetch(url);
+          if (!res.ok) return;
+          const data = await res.json();
+          const events = (data.items ?? []).filter((e) => e.start?.dateTime);
+          const match = events.find((e) => `${e.summary ?? ''} ${e.location ?? ''}`.toLowerCase().includes(firstWord));
+          if (match) {
+            const date = new Date(match.start.dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            slot.textContent = `Next demo: ${date}`;
+          }
+        } catch (err) {
+          console.error('In-store demo fetch failed', err);
+        }
+      }
+      loadNextDemo();
+    </script>
+  </div>
+</BaseLayout>
+
+<style>
+  .back { display: inline-block; font-size: 13.5px; font-weight: 600; color: var(--terracotta); text-decoration: none; margin-top: var(--space-4); }
+  .back:hover { text-decoration: underline; }
+  .page-head { padding: var(--space-2) 0 var(--space-4); }
+  .page-head h1 { margin-bottom: var(--space-2); }
+  .next-demo { font-size: 13.5px; font-weight: 600; color: var(--rust); min-height: 1.2em; margin-bottom: var(--space-2); }
+  .directions-btn { display: inline-block; }
+
+  .skus-h { margin-bottom: var(--space-2); }
+  .empty-note { font-size: 14px; opacity: 0.6; padding-bottom: var(--space-6); }
+  .skus { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-2); padding-bottom: var(--space-6); }
+  @media (max-width: 760px) { .skus { grid-template-columns: repeat(2, 1fr); } }
+  .sku { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .sku-photo { aspect-ratio: 3/4; background: var(--sand-pale); display: flex; align-items: center; justify-content: center; }
+  .sku-photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .sku-placeholder { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--rust); opacity: 0.6; text-align: center; padding: var(--space-1); }
+  .sku-label { font-size: 13px; font-weight: 600; padding: 10px 12px; }
+</style>
