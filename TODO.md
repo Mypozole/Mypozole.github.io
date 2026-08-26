@@ -52,6 +52,13 @@ See `PHOTOS-NEEDED.md` for exact file paths. Short version:
 18. Cup serving-size label fix: Chicken White's cup currently prints "1
     Cup (473mL)" instead of "1 Cup (454g)" like the other two whites,
     per the brief, this is a known/confirmed production issue.
+19. **About Pozole's "how it's made" paragraph is placeholder copy.**
+    Written from what the owner recalled secondhand (big cuts of pork
+    browned then simmered, broth used for the hominy, learned from his
+    mother), deliberately leaving out canned hominy and bouillon per the
+    owner's call. Jorge giving a real, first-person rundown of the
+    actual process would let this become real copy instead of a
+    placeholder built from someone else's memory of watching him cook.
 
 ## Wholesale page, currently a placeholder section
 
