@@ -1,10 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry, getCollection } from 'astro:content';
+import { getEntry } from 'astro:content';
 
 const founding = await getEntry('stories', 'founding-story');
-const products = await getCollection('products');
-const porkWhite = products.find((p) => p.id === 'pork-white')!.data.nutrition;
 ---
 <BaseLayout title="About Pozole | MyPozole" description="The real history of pozole, the three styles, what's actually in the toppings, and how MyPozole started.">
   <div class="wrap">
@@ -45,24 +43,9 @@ const porkWhite = products.find((p) => p.id === 'pork-white')!.data.nutrition;
       </div>
       <div class="style-card">
         <h3>Green <span class="es">(Verde)</span></h3>
-        <p>Made with tomatillo peppers. Meaningfully more Vitamin C than the other two. Unlike the red salsa, the green salsa does carry real heat, from serranos.</p>
+        <p>Made with tomatillos and serrano peppers, the serranos are the actual chile, tomatillos are their own fruit, not a pepper. Meaningfully more Vitamin C than the other two. Unlike the red salsa, the green salsa does carry real heat, from those same serranos.</p>
       </div>
     </div>
-
-    <section class="nutrition">
-      <p class="label">The numbers</p>
-      <h2>All the flavor, most of the guilt already gone.</h2>
-      <p class="nutrition-lead">
-        A dish this old earned its reputation the slow way, not by chasing a
-        health trend. It still holds up by the numbers: {porkWhite.proteinGrams}g
-        of protein and {porkWhite.fiberGrams}g of fiber per serving in our
-        Pork White, real hominy instead of empty starch, no artificial
-        shortcuts. The one place we won't pretend it's perfect is sodium,
-        sitting around {Math.round((porkWhite.sodiumMg / 2300) * 100)}% of a
-        day's recommended value per serving. Everything else holds up on its
-        own without needing an adjective to sell it.
-      </p>
-    </section>
 
     <section class="story">
       <div class="story-photo" data-photo-slot="founder-photo"></div>
@@ -96,10 +79,6 @@ const porkWhite = products.find((p) => p.id === 'pork-white')!.data.nutrition;
   .style-card h3 { margin-bottom: 8px; }
   .es { font-weight: 500; opacity: 0.55; font-size: 0.7em; }
   .style-card p { font-size: 14.5px; opacity: 0.76; line-height: 1.6; }
-
-  .nutrition { padding: var(--space-4) 0; border-top: 1px solid var(--line-soft); }
-  .nutrition h2 { max-width: 20ch; margin: 8px 0 var(--space-2); }
-  .nutrition-lead { font-size: 16.5px; line-height: 1.7; opacity: 0.82; max-width: 64ch; }
 
   .story { padding: var(--space-4) 0; border-top: 1px solid var(--line-soft); }
   .story-photo { aspect-ratio: 16/9; max-width: 480px; border-radius: 4px; background: var(--sand-pale); margin-bottom: var(--space-3); }
