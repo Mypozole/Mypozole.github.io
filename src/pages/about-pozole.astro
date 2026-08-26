@@ -1,20 +1,44 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getEntry } from 'astro:content';
+import { getEntry, getCollection } from 'astro:content';
 
 const founding = await getEntry('stories', 'founding-story');
+const products = await getCollection('products');
+const porkWhite = products.find((p) => p.id === 'pork-white')!.data.nutrition;
 ---
-<BaseLayout title="About Pozole | MyPozole" description="The three styles of pozole, what's really in the toppings, and how MyPozole started.">
+<BaseLayout title="About Pozole | MyPozole" description="The real history of pozole, the three styles, what's actually in the toppings, and how MyPozole started.">
   <div class="wrap">
     <header class="page-head">
       <p class="label">About Pozole</p>
-      <h1>Three styles, one family recipe.</h1>
+      <h1>A dish older than the country it comes from.</h1>
     </header>
+
+    <section class="history">
+      <p>
+        Pozole's name comes from the Nahuatl word <em>pozolli</em>, meaning
+        foamy or frothy, a reference to how the corn looks as it cooks down
+        into hominy. The dish itself predates the Spanish arrival in Mexico
+        by centuries, eaten across Mesoamerica under Aztec rule as early as
+        the 1300s. Corn wasn't just food to the Aztecs, it was sacred, tied
+        directly to their origin stories, and pozole was reserved for
+        ceremonial occasions rather than eaten as an everyday meal.
+      </p>
+      <p>
+        The dish's oldest versions used human flesh as the protein, a
+        practice tied to ritual sacrifice that ended once Spanish colonizers
+        banned it in the 16th century. Pork took its place, being the
+        closest available substitute at the time, and that's the version
+        that spread and took root across Mexico's regions. Over the
+        centuries, regional cooks built their own variations on top of the
+        same hominy base, and today those variations have settled into
+        three recognized styles: White, Red, and Green.
+      </p>
+    </section>
 
     <div class="styles">
       <div class="style-card">
         <h3>White <span class="es">(Blanco)</span></h3>
-        <p>The base recipe, hominy and broth, built for everyone to finish their own way at the table.</p>
+        <p>The base recipe, hominy and broth, built for everyone to finish their own way at the table. This is the style Jorge's family has made for generations, from Mexico City.</p>
       </div>
       <div class="style-card">
         <h3>Red <span class="es">(Rojo)</span></h3>
@@ -26,11 +50,26 @@ const founding = await getEntry('stories', 'founding-story');
       </div>
     </div>
 
+    <section class="nutrition">
+      <p class="label">The numbers</p>
+      <h2>All the flavor, most of the guilt already gone.</h2>
+      <p class="nutrition-lead">
+        A dish this old earned its reputation the slow way, not by chasing a
+        health trend. It still holds up by the numbers: {porkWhite.proteinGrams}g
+        of protein and {porkWhite.fiberGrams}g of fiber per serving in our
+        Pork White, real hominy instead of empty starch, no artificial
+        shortcuts. The one place we won't pretend it's perfect is sodium,
+        sitting around {Math.round((porkWhite.sodiumMg / 2300) * 100)}% of a
+        day's recommended value per serving. Everything else holds up on its
+        own without needing an adjective to sell it.
+      </p>
+    </section>
+
     <section class="story">
       <div class="story-photo" data-photo-slot="founder-photo"></div>
       <h2>How MyPozole started</h2>
       {founding?.data.body ? (
-        <p>{founding.data.body}</p>
+        founding.data.body.split('\n\n').map((para) => <p>{para}</p>)
       ) : (
         <p class="pending">This section is still being written, sourced from three published pieces about MyPozole. Coming soon.</p>
       )}
@@ -46,6 +85,12 @@ const founding = await getEntry('stories', 'founding-story');
 
 <style>
   .page-head { padding: var(--space-6) 0 var(--space-3); }
+  .page-head h1 { max-width: 18ch; }
+
+  .history { padding-bottom: var(--space-4); }
+  .history p { font-size: 16.5px; line-height: 1.7; opacity: 0.82; max-width: 68ch; margin-bottom: var(--space-2); }
+  .history em { font-style: italic; color: var(--rust); font-weight: 600; }
+
   .styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-bottom: var(--space-4); }
   @media (max-width: 760px) { .styles { grid-template-columns: 1fr; } }
   .style-card { border: 1px solid var(--line); border-radius: 4px; padding: var(--space-3); background: var(--paper); }
@@ -53,10 +98,14 @@ const founding = await getEntry('stories', 'founding-story');
   .es { font-weight: 500; opacity: 0.55; font-size: 0.7em; }
   .style-card p { font-size: 14.5px; opacity: 0.76; line-height: 1.6; }
 
+  .nutrition { padding: var(--space-4) 0; border-top: 1px solid var(--line-soft); }
+  .nutrition h2 { max-width: 20ch; margin: 8px 0 var(--space-2); }
+  .nutrition-lead { font-size: 16.5px; line-height: 1.7; opacity: 0.82; max-width: 64ch; }
+
   .story { padding: var(--space-4) 0; border-top: 1px solid var(--line-soft); }
   .story-photo { aspect-ratio: 16/9; max-width: 480px; border-radius: 4px; background: var(--sand-pale); margin-bottom: var(--space-3); }
   .story h2 { margin-bottom: var(--space-2); }
-  .story p { font-size: 16px; opacity: 0.8; max-width: 62ch; line-height: 1.65; }
+  .story p { font-size: 16px; opacity: 0.8; max-width: 62ch; line-height: 1.65; margin-bottom: var(--space-2); }
   .pending { opacity: 0.55; font-style: italic; }
 
   .cross-links { display: flex; gap: var(--space-3); padding: var(--space-3) 0 var(--space-6); flex-wrap: wrap; }

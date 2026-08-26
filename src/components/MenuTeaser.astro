@@ -27,7 +27,7 @@ const photos: Record<string, ImageMetadata> = {
         const photo = photos[item.id];
         const isDeliverable = item.data.fulfillment === 'delivery-or-pickup';
         return (
-          <article class="item">
+          <a href={`/menu/${item.id}`} class="item">
             <div class="ph">
               {photo ? (
                 <Image src={photo} alt={item.data.name} width={400} height={400} />
@@ -42,7 +42,7 @@ const photos: Record<string, ImageMetadata> = {
                 {isDeliverable ? 'Delivery or pickup available' : 'Find this at the trailer →'}
               </p>
             </div>
-          </article>
+          </a>
         );
       })}
     </div>
@@ -52,7 +52,8 @@ const photos: Record<string, ImageMetadata> = {
 <style>
   .menu-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-2); }
   @media (max-width: 940px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
-  .item { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); }
+  .item { display: block; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); text-decoration: none; transition: border-color 0.15s; }
+  .item:hover { border-color: var(--terracotta); }
   .ph {
     aspect-ratio: 1;
     background: radial-gradient(90% 80% at 40% 30%, #E8DFCB 0%, transparent 65%), var(--sand-pale);

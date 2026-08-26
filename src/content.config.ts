@@ -57,6 +57,7 @@ const menuItems = defineCollection({
   schema: z.object({
     name: z.string(),
     description: z.string(),
+    longDescription: z.string(),
     fulfillment: z.enum(['delivery-or-pickup', 'market-and-trailer-only']),
     fulfillmentNote: z.string(),
     order: z.number(),
