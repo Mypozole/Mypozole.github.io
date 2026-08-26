@@ -97,8 +97,13 @@ See `PHOTOS-NEEDED.md` for exact file paths. Short version:
 
 ## Infrastructure, lower priority
 
-30. GitHub → Netlify auto-deploy isn't wired up yet, I'm still running a
-    manual build + deploy from here each time. Worth doing eventually so
-    a push to `main` goes live on its own.
+30. ~~GitHub auto-deploy~~ **Resolved 2026-08-26.** Netlify's free-tier
+    credits ran out from repeated manual deploys, so primary hosting
+    moved to GitHub Pages (`https://mypozole.github.io`), with a real
+    GitHub Actions workflow, push to `main` now deploys automatically.
+    Netlify site is still live as a frozen backup until its Sep 19
+    billing reset, no action needed there unless you want to keep paying
+    attention to it.
 31. Domain cutover (mypozole.com pointing at this site) is still blocked
-    on GoDaddy account recovery, tracked separately, not site work.
+    on GoDaddy account recovery, tracked separately, not site work. Once
+    unblocked, nameservers should point at GitHub Pages, not Netlify.
