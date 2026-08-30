@@ -21,25 +21,37 @@ some of these, this file is the one to actually work from.
 
 See `PHOTOS-NEEDED.md` for exact file paths. Short version:
 
-4. Real Burrito photo (current one may be AI-generated, unconfirmed).
+4. ~~Real Burrito photo~~ **Resolved 2026-08-30.** Replaced with a real
+   photo (`IMG_9940.jpg`) from your Desktop pictures folder.
 5. Real Pozole **cup** photo (site currently shows a bowl, spec wants a cup).
 6. Retouch the 2 existing take-home pouch photos (Pork Red, Chicken Green).
 7. The remaining 7 take-home SKU photos (Pork White/Green, Chicken
    White/Red, Vegan White/Red/Green). You mentioned this is in progress.
-8. Poztada has no photo at all yet, not even a placeholder-quality one.
+8. ~~Poztada has no photo at all yet~~ **Resolved 2026-08-30.** Added a
+   real photo (`IMG_5136.jpg`) from your pictures folder.
 9. Catering door photos, one each for Home/Office/Events (placeholder
-   slots already built, just empty right now).
-10. Founder/story photo for the About Pozole page (placeholder slot
-    already built).
+   slots already built, just empty right now). Found a strong candidate
+   for Events in your pictures folder (`IMG_9196.jpg`, the branded
+   catering spread with Red Pork/Green Chicken/Jackfruit labels), not
+   wired in yet, still need Home and Office candidates.
+10. ~~Founder/story photo~~ **Resolved 2026-08-30.** You confirmed the
+    photo you sent in chat is you (Jorge) and uploaded it to the
+    Marketing folder in Drive, pulled it from there and it's live on
+    the About Pozole page.
 
 ## Data and pricing, needs your confirmation
 
 11. **Pork Red protein conflict**: the real pouch label photo shows 24g,
     the handoff brief's table says 25g. Site currently uses 24g (the
     photographed label). Confirm which is right.
-12. **Pozole Party minimum headcount**: two source docs disagree, 30 vs
-    30-40 people. Not published as a specific number anywhere yet because
-    of this.
+12. ~~**Pozole Party minimum headcount**~~ **Resolved 2026-08-30.** You
+    sent the real `MyPozole Catering Packages 2026.pdf`, turns out each
+    package just has its own minimum (A: 40, B: 35, C: 30), no real
+    conflict. Real pricing for all three is now live on `/catering/events`
+    as comparison cards. One loose end: the older handoff docs said
+    on-site trailer service was on hold pending San Diego County DEHQ
+    licensing, worth a direct confirm that's resolved next time it comes
+    up, see `NEEDS-DATA.md`.
 13. **Online-order price per container**: the Menu page's order builder
     is using the $15.99 retail pouch price as a labeled estimate. If the
     real online/hot-order price is different, give me the number.
@@ -86,8 +98,11 @@ See `PHOTOS-NEEDED.md` for exact file paths. Short version:
 26. **Toppings builder** (interactive), the real topping list exists now
     (from the pouch label), but no per-topping pricing, and no UI built
     yet.
-27. **Live reviews widget** (Google/Yelp), needs whichever service's
-    account/API access, not something I can set up myself.
+27. **Live reviews widget** (Google/Yelp) — in progress 2026-08-30, you
+    created a Featurable account. Once you connect your Google Business
+    Profile in Featurable and build a widget there, send me the embed
+    snippet (script tag + div, or an iframe URL) and I'll drop it into
+    the testimonials section, no API key needed for a standard embed.
 28. **Real checkout/payments** (Stripe), needs a real Stripe account.
     Right now every "order" flow (Catering, Online Order) collects the
     request and estimate, then a human confirms and takes payment

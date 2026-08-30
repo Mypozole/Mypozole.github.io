@@ -87,10 +87,22 @@ these areas.
 
 ## Catering gaps
 
-- **Pozole Party minimum headcount conflict.** MyPozole_Sitemap.md section
-  3c says 30-person minimum; MyPozole_Claude_Design_Build_Brief.md section 4
-  says 30-40 person minimums. Flagged in
-  `src/data/catering-pricing.json`, needs Jorge to confirm one number.
+- ~~**Pozole Party minimum headcount conflict.**~~ **Resolved 2026-08-30.**
+  Jorge sent the real `MyPozole Catering Packages 2026.pdf` directly. Turns
+  out there was no real conflict, each of the three packages just has its
+  own minimum: Package A 40, Package B 35, Package C 30. Full real pricing,
+  inclusions, and add-ons for all three are now in
+  `src/data/catering-pricing.json` and live on `/catering/events` as
+  comparison cards.
+  **Still open:** the earlier handoff docs (`MyPozole_Sitemap.md` section
+  3c, `MyPozole_Claude_Design_Build_Brief.md` section 4) both said on-site
+  trailer service was on hold pending San Diego County DEHQ licensing, and
+  neither `TODO.md` nor Jorge's TODO answers confirmed that's resolved.
+  The new page doesn't claim it's licensed either way, it presents the
+  real pricing with a "request to book, a human confirms" CTA (matching
+  every other catering flow on the site, none of which auto-charge
+  anyway), so this isn't blocking, but worth a direct confirm from Jorge
+  next time it comes up.
 - **Free delivery threshold.** The live online-ordering page references free
   delivery above some order size but never states the amount.
 

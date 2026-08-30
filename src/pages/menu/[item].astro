@@ -8,6 +8,7 @@ import photoPozole from '../../assets/photos/pozole.jpg';
 import photoBurrito from '../../assets/photos/burrito.jpg';
 import photoPoznachos from '../../assets/photos/poznachos.jpg';
 import photoPozfrito from '../../assets/photos/pozfrito.jpg';
+import photoPoztada from '../../assets/photos/poztada.jpg';
 
 export async function getStaticPaths() {
   const items = await getCollection('menuItems');
@@ -25,6 +26,7 @@ const photos: Record<string, ImageMetadata> = {
   'pozole-burrito': photoBurrito,
   poznachos: photoPoznachos,
   pozfrito: photoPozfrito,
+  poztada: photoPoztada,
 };
 const photo = photos[item.id];
 const isPozole = item.id === 'pozole';

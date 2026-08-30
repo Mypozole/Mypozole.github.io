@@ -12,13 +12,72 @@
     ]
   },
   "pozolePartyPackages": {
-    "names": ["Package A", "Package B", "Package C"],
-    "pricing": "per person, on-site service, tostada bar, self-serve toppings",
-    "minimumPeople": "30 (Sitemap section 3c) to 40 (Design Build Brief section 4) - the two source docs disagree on the exact minimum, confirm with Jorge before publishing a number",
-    "deposit": "50% holds the date",
-    "cancellationWindow": "60 days",
-    "serviceWindow": "two hour service window",
-    "addOns": ["Poztadas", "Poznachos", "agua fresca"],
-    "status": "Not bookable yet. On-site trailer service is pending San Diego County DEHQ licensing. Do not present as available until resolved."
+    "source": "MyPozole Catering Packages 2026.pdf, provided directly by Jorge 2026-08-30. Resolves the earlier minimum-headcount conflict, each package simply has its own minimum (40 / 35 / 30), the two older source docs were each only describing one package.",
+    "sharedTerms": [
+      "2 hour service window included, additional time available at extra cost",
+      "Serving packaging and utensils included",
+      "Guest count can be adjusted up to 48 hours in advance, never below the package minimum",
+      "50% deposit holds the date, full refund if cancelled 60+ days out, remaining balance due day of event",
+      "Food truck service is standard; a pop-up setup is available on request, best for backyard or wedding settings",
+      "CA sales tax not included in package prices"
+    ],
+    "packages": [
+      {
+        "name": "Package A",
+        "tagline": "The Basic",
+        "pricePerPerson": 13,
+        "minimumPeople": 40,
+        "includes": [
+          "One Pozole variety, 16oz cups",
+          "2 tostadas per person",
+          "Soft drinks included (Coke, Diet Coke, Ginger Ale, Manzanita, bottled water)"
+        ],
+        "addOns": [
+          { "label": "2nd Pozole variety", "price": "+$1/person" },
+          { "label": "All 3 varieties", "price": "+$2/person" },
+          { "label": "Vegan beans & sour cream spread for the tostadas", "price": "+$1/person" },
+          { "label": "Avocado topping", "price": "+$1/person" }
+        ]
+      },
+      {
+        "name": "Package B",
+        "tagline": "All-You-Can-Enjoy A La Carte",
+        "pricePerPerson": 16,
+        "minimumPeople": 35,
+        "includes": [
+          "Unlimited servings of one Pozole variety, 12oz cups (16oz available)",
+          "Tostadas with a beans and sour cream spread"
+        ],
+        "addOns": [
+          { "label": "2nd Pozole variety", "price": "+$1/person" },
+          { "label": "All 3 varieties", "price": "+$2/person" },
+          { "label": "Poztadas / Poznachos option", "price": "+$1/person" },
+          { "label": "Pozfrito option", "price": "+$2/person" },
+          { "label": "Tostada / topping bar", "price": "+$1/person" },
+          { "label": "Soft drinks", "price": "+$2/person" },
+          { "label": "Pozole Burrito option", "price": "+$1/person" },
+          { "label": "Avocado topping", "price": "+$2/person" }
+        ]
+      },
+      {
+        "name": "Package C",
+        "tagline": "The Everything",
+        "pricePerPerson": 24,
+        "minimumPeople": 30,
+        "featured": true,
+        "includes": [
+          "Unlimited servings of all 3 Pozole varieties, 12oz cups",
+          "Poztadas, Poznachos, Pozole Burrito, and Pozfrito all available",
+          "Tostada bar included, self-serve toppings",
+          "Drinks included (premium drinks available at extra cost)"
+        ],
+        "addOns": [
+          { "label": "Only 2 varieties instead of 3", "price": "-$1/person" },
+          { "label": "Only 1 variety instead of 3", "price": "-$2/person" },
+          { "label": "Avocado topping", "price": "+$2/person" }
+        ]
+      }
+    ],
+    "status": "Request to book, a real person confirms your date and takes the 50% deposit. Nothing is charged automatically."
   }
 }
