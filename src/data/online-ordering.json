@@ -1,9 +1,9 @@
 {
-  "source": "mypozole.com/online-ordering, fetched 2026-08-24, cross-checked against MyPozole_Claude_Design_Build_Brief.md section 4 and MyPozole_Sitemap.md section 5",
+  "source": "mypozole.com/online-ordering, fetched 2026-08-24, cross-checked against MyPozole_Claude_Design_Build_Brief.md section 4 and MyPozole_Sitemap.md section 5. Delivery fee updated to $10 per owner 2026-08-30 (was $5, they said it 'should change to $10' for San Diego County deliveries, pending the online store setup).",
   "minimumDollars": 40,
-  "deliveryFeeDollars": 5,
+  "deliveryFeeDollars": 10,
   "freeDeliveryThreshold": null,
-  "freeDeliveryNote": "Live site references free delivery above a threshold but does not state the amount. Confirm with Jorge before publishing a number.",
+  "freeDeliveryNote": "Owner said this is blocked on finalizing a cold-shipping strategy and setting up the online store, not answerable yet as of 2026-08-30.",
   "fulfillsOnly": "Pozole itself and its toppings, nothing hot, nothing assembled. Delivered in prepackaged 32oz containers to be reheated; all toppings on separate to-go containers.",
   "excludes": ["Pozole Burrito", "Poztada", "Poznachos", "Pozfrito"],
   "excludesNote": "These four have no commissary path at all, they are market and trailer only (MyPozole_Sitemap.md section 5)."

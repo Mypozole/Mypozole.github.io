@@ -74,11 +74,22 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
         return;
       }
 
-      function mapsUrl(location?: string): string | null {
+      // Exact stand/booth pins, owner-provided 2026-08-27. Falls back to a
+      // generic address search for anything not in this list.
+      const exactPins: Record<string, string> = {
+        'little italy': 'https://maps.app.goo.gl/snHEkbnFPnySGDsQ6',
+        'hillcrest': 'https://maps.app.goo.gl/KZ1FS1tSP1koq1xn7',
+        'la jolla': 'https://maps.app.goo.gl/9tyu8349G369qdwt6',
+        'poway': 'https://maps.app.goo.gl/RXYaba148pwp5paj8',
+        'sdsu': 'https://maps.app.goo.gl/4MsmisEQBNQ5aSnu8',
+      };
+      function mapsUrl(name: string, location?: string): string | null {
+        const key = Object.keys(exactPins).find((k) => name.toLowerCase().includes(k));
+        if (key) return exactPins[key];
         return location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}` : null;
       }
       function placeLink(name: string, location?: string): string {
-        const url = mapsUrl(location);
+        const url = mapsUrl(name, location);
         return url ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a>` : name;
       }
 

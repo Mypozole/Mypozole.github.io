@@ -22,13 +22,9 @@ const retailerDemand = stats.find((s) => s.id === 'retailer-demand');
   <WholesaleTeaser />
 
   <div class="wrap">
-    <div class="gaps">
-      <h3>Case pack, margin, lead time, certifications, sell sheet</h3>
-      <p>Not published yet, this section is waiting on real numbers before it goes live rather than an estimate.</p>
-    </div>
-
     <div class="form-wrap">
-      <h2>Request a sample and sell sheet</h2>
+      <h2>Interested in carrying MyPozole?</h2>
+      <p class="form-lead">Tell us a bit about your store, we'll follow up with pricing, samples, and everything else you need.</p>
       <form id="wholesale-form" novalidate data-formspree="https://formspree.io/f/xlgyqkpq" data-email={site.email}>
         <div class="field">
           <label for="wf-store">Store or company name</label>
@@ -102,12 +98,9 @@ const retailerDemand = stats.find((s) => s.id === 'retailer-demand');
   .page-head { padding: var(--space-6) 0 var(--space-3); }
   .page-head h1 { margin-bottom: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
-  .gaps { padding: var(--space-4) 0 var(--space-6); border-top: 1px solid var(--line-soft); margin-top: var(--space-2); }
-  .gaps h3 { margin-bottom: 8px; }
-  .gaps p { font-size: 15px; opacity: 0.7; margin-bottom: var(--space-2); max-width: 56ch; }
-
-  .form-wrap { max-width: 480px; padding-bottom: var(--space-6); }
-  .form-wrap h2 { margin-bottom: var(--space-2); }
+  .form-wrap { max-width: 480px; padding-top: var(--space-4); padding-bottom: var(--space-6); border-top: 1px solid var(--line-soft); margin-top: var(--space-2); }
+  .form-wrap h2 { margin-bottom: 8px; }
+  .form-lead { font-size: 15px; opacity: 0.7; margin-bottom: var(--space-3); max-width: 56ch; }
   .field { margin-bottom: 14px; }
   .field label { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
   .field .opt { font-weight: 500; opacity: 0.6; }
