@@ -21,14 +21,16 @@ some of these, this file is the one to actually work from.
 
 See `PHOTOS-NEEDED.md` for exact file paths. Short version:
 
-4. ~~Real Burrito photo~~ **Resolved 2026-08-30.** Replaced with a real
-   photo (`IMG_9940.jpg`) from your Desktop pictures folder.
-5. Real Pozole **cup** photo (site currently shows a bowl, spec wants a cup).
-6. Retouch the 2 existing take-home pouch photos (Pork Red, Chicken Green).
-7. The remaining 7 take-home SKU photos (Pork White/Green, Chicken
-   White/Red, Vegan White/Red/Green). You mentioned this is in progress.
-8. ~~Poztada has no photo at all yet~~ **Resolved 2026-08-30.** Added a
-   real photo (`IMG_5136.jpg`) from your pictures folder.
+4. ~~Real Burrito photo~~ **Resolved 2026-09-03.** Replaced again with
+   the new 5-item photoshoot set from your "menu items" Drive folder.
+5. ~~Real Pozole cup photo~~ **Resolved 2026-09-03.** New photo from the
+   same set is a real cup shot, not a bowl.
+6. ~~Retouch the 2 existing take-home pouch photos~~ **Resolved
+   2026-09-03.** Superseded by the full 9-SKU set, see item 7.
+7. ~~The remaining 7 take-home SKU photos~~ **Resolved 2026-09-03.** All
+   9 SKUs now live on Where to Buy.
+8. ~~Poztada has no photo at all yet~~ **Resolved 2026-09-03.** Replaced
+   again with the new 5-item photoshoot set.
 9. Catering door photos, one each for Home/Office/Events (placeholder
    slots already built, just empty right now). Found a strong candidate
    for Events in your pictures folder (`IMG_9196.jpg`, the branded

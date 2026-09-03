@@ -9,28 +9,26 @@ change too."
 
 ## Replace existing photos
 
-- ~~**Pozole Burrito**~~ **Resolved 2026-08-30.** Owner gave explicit
-  permission to pull real photos from their Desktop/MyPozole/pictures
-  folder. Replaced with `IMG_9940.jpg` (real overhead phone photo, cut
-  burrito in its to-go container with chips and salsas) at
-  `src/assets/photos/burrito.jpg`. The old possibly-AI photo is gone,
-  wired into both `src/components/MenuTeaser.astro` and
-  `src/pages/menu/[item].astro`, no other code change needed since the
-  filename stayed the same.
-- **Pozole** — `src/assets/photos/pozole.jpg`. Currently a bowl; the
-  spec wants a **cup**, since that's how it's actually served at
-  market/trailer. Shows on Home's menu grid and the Menu page.
-- ~~**Take-home pouch photos, retouching**~~ **Superseded 2026-09-03.**
-  See the full 9-SKU note below, all 9 including these two were replaced
-  together.
+- ~~**Pozole Burrito**~~ **Resolved 2026-08-30, superseded 2026-09-03.**
+  See the full 5-item menu photoshoot note below, replaced again as part
+  of that matched set.
+- ~~**Pozole**~~ **Resolved 2026-09-03.** New photo is a genuine **cup**
+  shot (two MyPozole cups, market background), finally matching the
+  spec's "cup, not bowl" requirement. See the 5-item photoshoot note
+  below.
 
 ## Add new photos (no current photo at all)
 
-- ~~**Poztada**~~ **Resolved 2026-08-30.** Added `IMG_5136 (1).jpg`
-  (real market photo, tostada held up with the farmers market blurred
-  behind it) as `src/assets/photos/poztada.jpg`, wired into the
-  `photos` map in both `src/components/MenuTeaser.astro` and
-  `src/pages/menu/[item].astro`. Confirmed live via local preview.
+- ~~**All 5 menu item photos**~~ **Resolved 2026-09-03.** Owner supplied
+  a matched 5-photo set (Pozole, Pozole Burrito, Poztada, Poznachos,
+  Pozfrito) via a Drive folder, plainly named per item (no AI-tool
+  filename fingerprint this time, e.g. not "ChatGPT Image..."), consistent
+  lighting/style across the set, and the burrito shot is byte-identical
+  to the real phone photo already verified 2026-08-30. Replaced
+  `src/assets/photos/{pozole,burrito,poztada,poznachos,pozfrito}.jpg`
+  directly, no code changes needed since filenames matched exactly what
+  `MenuTeaser.astro` and `menu/[item].astro` already import. Verified all
+  5 load correctly (400x400, complete) via local preview.
 - ~~**Take-home pouches, remaining 7 SKUs**~~ **Resolved 2026-09-03, with
   a caveat.** All 9 SKU pouch photos (Pork/Chicken/Vegan × White/Red/Green)
   are now live in `src/pages/where-to-buy/[id].astro`'s `photos` map
@@ -68,10 +66,8 @@ change too."
 - **Hero photo** (`hero.jpg`) — approved, just recropped 2026-08-25.
 - **Logo** (`logo.png`) — the real transparent-background round logo,
   confirmed correct 2026-08-25.
-- **Poznachos** (`poznachos.jpg`) — no concerns raised. (Note: the
-  owner's pictures folder also has `IMG_5915.jpg`/`IMG_5918.jpg`, real
-  alternate Poznachos shots, only worth swapping in if the current one
-  is ever actually replaced, not needed on their own.)
+- **Poznachos** (`poznachos.jpg`) — replaced 2026-09-03 as part of the
+  5-item photoshoot set above, no concerns.
 
 ## How to actually replace one
 
