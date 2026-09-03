@@ -2,8 +2,15 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
+import photoPorkWhite from '../../assets/photos/takehome_pork_white.jpg';
 import photoPorkRed from '../../assets/photos/takehome_pork_red.jpg';
+import photoPorkGreen from '../../assets/photos/takehome_pork_green.jpg';
+import photoChickenWhite from '../../assets/photos/takehome_chicken_white.jpg';
+import photoChickenRed from '../../assets/photos/takehome_chicken_red.jpg';
 import photoChickenGreen from '../../assets/photos/takehome_chicken_green.jpg';
+import photoVeganWhite from '../../assets/photos/takehome_vegan_white.jpg';
+import photoVeganRed from '../../assets/photos/takehome_vegan_red.jpg';
+import photoVeganGreen from '../../assets/photos/takehome_vegan_green.jpg';
 
 export async function getStaticPaths() {
   const locations = await getCollection('locations');
@@ -25,8 +32,15 @@ const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 
 const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
 
 const photos: Record<string, ImageMetadata> = {
+  'pork-white': photoPorkWhite,
   'pork-red': photoPorkRed,
+  'pork-green': photoPorkGreen,
+  'chicken-white': photoChickenWhite,
+  'chicken-red': photoChickenRed,
   'chicken-green': photoChickenGreen,
+  'vegan-white': photoVeganWhite,
+  'vegan-red': photoVeganRed,
+  'vegan-green': photoVeganGreen,
 };
 ---
 <BaseLayout title={`${loc.data.name} | MyPozole`} description={`What's in stock at ${loc.data.name}, and how to get there.`}>

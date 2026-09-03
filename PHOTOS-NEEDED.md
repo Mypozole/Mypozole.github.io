@@ -20,10 +20,9 @@ change too."
 - **Pozole** — `src/assets/photos/pozole.jpg`. Currently a bowl; the
   spec wants a **cup**, since that's how it's actually served at
   market/trailer. Shows on Home's menu grid and the Menu page.
-- **Take-home pouch photos, retouching** — `src/assets/photos/takehome_pork_red.jpg`
-  and `takehome_chicken_green.jpg`. Currently real phone photos, on the
-  owner's to-do list for retouching. Show on the Where to Buy hub and
-  each store's detail page.
+- ~~**Take-home pouch photos, retouching**~~ **Superseded 2026-09-03.**
+  See the full 9-SKU note below, all 9 including these two were replaced
+  together.
 
 ## Add new photos (no current photo at all)
 
@@ -32,13 +31,21 @@ change too."
   behind it) as `src/assets/photos/poztada.jpg`, wired into the
   `photos` map in both `src/components/MenuTeaser.astro` and
   `src/pages/menu/[item].astro`. Confirmed live via local preview.
-- **Take-home pouches, remaining 7 SKUs** — Pork White, Pork Green,
-  Chicken White, Chicken Red, Vegan White, Vegan Red, Vegan Green. Only
-  Pork Red and Chicken Green exist right now. Once the full 9-SKU set
-  exists, `src/pages/where-to-buy/[id].astro`'s `photos` map should
-  probably be restructured to something more scalable than 9 hardcoded
-  imports (**needs a code change too**) rather than growing by hand each
-  time.
+- ~~**Take-home pouches, remaining 7 SKUs**~~ **Resolved 2026-09-03, with
+  a caveat.** All 9 SKU pouch photos (Pork/Chicken/Vegan × White/Red/Green)
+  are now live in `src/pages/where-to-buy/[id].astro`'s `photos` map
+  (still 9 hardcoded imports, not restructured, works fine at this size).
+  **Caveat, flagged to the owner and approved anyway 2026-09-03:** the
+  Drive folder these came from ("take home edited" under Marketing) has
+  every file named like `ChatGPT Image Sep 3, 2026, ...png`, the default
+  export name from ChatGPT's image generator. These read as AI-generated
+  packaging renders, not real photos of the physical printed pouches,
+  which runs against this project's own standing rule (buildbrief section
+  3, restated multiple times in this file): real photographs only, no
+  generated imagery except white-style illustrative content. Owner was
+  told this directly and said to use them anyway. Worth revisiting if
+  real pouch photography ever happens, since as of now the whole
+  Where to Buy product grid is AI-generated, not photographed.
 - **Catering door photos**, one each for Home Catering, Office
   Catering, Events Catering. Placeholder slots are already built into
   `src/components/CateringTeaser.astro` (`data-photo-slot="catering-home"`,
