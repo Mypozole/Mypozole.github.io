@@ -11,7 +11,7 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
       <h2>Find MyPozole</h2>
     </div>
     <div class="sched-body" id="sched-body" data-key={apiKey} data-cal-farmers={farmersMarketsId} data-cal-popup={popupEventsId} data-cal-foodtruck={foodTruckId}>
-      <p class="loading">Loading this week's stops...</p>
+      <p class="loading">Loading the schedule...</p>
     </div>
   </div>
 </aside>
@@ -30,10 +30,14 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
   function fmtDay(iso: string): string {
     return new Date(iso).toLocaleDateString('en-US', { weekday: 'short' });
   }
+  function fmtDate(iso: string): string {
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
 
   async function fetchCalendar(calendarId: string, apiKey: string): Promise<CalEvent[]> {
     const timeMin = new Date().toISOString();
-    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&singleEvents=true&orderBy=startTime&timeMin=${timeMin}&maxResults=8`;
+    const timeMax = new Date(Date.now() + 31 * 24 * 60 * 60 * 1000).toISOString();
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?key=${apiKey}&singleEvents=true&orderBy=startTime&timeMin=${timeMin}&timeMax=${timeMax}&maxResults=100`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Calendar fetch failed: ${res.status}`);
     const data = await res.json();
@@ -67,7 +71,7 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
 
       const now = new Date();
       const live = events.find((e) => new Date(e.start) <= now && now <= new Date(e.end));
-      const upcoming = events.filter((e) => new Date(e.start) > now).slice(0, 4);
+      const upcoming = events.filter((e) => new Date(e.start) > now);
 
       if (!live && upcoming.length === 0) {
         body.innerHTML = '<p class="pending">No upcoming stops on the calendar right now.</p>';
@@ -92,6 +96,13 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
         const url = mapsUrl(name, location);
         return url ? `<a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a>` : name;
       }
+      function addressLine(name: string, location?: string): string {
+        const url = mapsUrl(name, location);
+        const text = location || 'Address not listed yet';
+        return url
+          ? `<a class="addr" href="${url}" target="_blank" rel="noopener noreferrer">${text}</a>`
+          : `<span class="addr">${text}</span>`;
+      }
 
       let html = '';
       if (live) {
@@ -99,26 +110,33 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
         html += `<div class="sched-now">
           <p class="lbl">Live now</p>
           <p class="place">${placeLink(live.summary, live.location)}</p>
-          <p class="when">Until ${fmtTime(live.end)}${live.location ? `<br>${live.location}` : ''}</p>
+          <p class="when">Until ${fmtTime(live.end)}</p>
+          ${addressLine(live.summary, live.location)}
         </div>`;
       } else if (upcoming[0]) {
         const next = upcoming[0];
         html += `<div class="sched-now">
           <p class="lbl">Next up</p>
           <p class="place">${placeLink(next.summary, next.location)}</p>
-          <p class="when">${fmtDay(next.start)}, ${fmtTime(next.start)} to ${fmtTime(next.end)}${next.location ? `<br>${next.location}` : ''}</p>
+          <p class="when">${fmtDay(next.start)} ${fmtDate(next.start)}, ${fmtTime(next.start)} to ${fmtTime(next.end)}</p>
+          ${addressLine(next.summary, next.location)}
         </div>`;
       }
 
-      const rest = live ? upcoming.slice(0, 4) : upcoming.slice(1);
-      for (const e of rest) {
-        html += `<div class="stop">
-          <span class="stop-day">${fmtDay(e.start)}</span>
-          <div>
-            <div class="stop-place">${placeLink(e.summary, e.location)}</div>
-            <div class="stop-when">${fmtTime(e.start)} to ${fmtTime(e.end)}</div>
-          </div>
-        </div>`;
+      const rest = live ? upcoming : upcoming.slice(1);
+      if (rest.length > 0) {
+        html += '<div class="stop-list">';
+        for (const e of rest) {
+          html += `<div class="stop">
+            <span class="stop-day">${fmtDay(e.start)}<br>${fmtDate(e.start)}</span>
+            <div class="stop-info">
+              <div class="stop-place">${placeLink(e.summary, e.location)}</div>
+              <div class="stop-when">${fmtTime(e.start)} to ${fmtTime(e.end)}</div>
+              ${addressLine(e.summary, e.location)}
+            </div>
+          </div>`;
+        }
+        html += '</div>';
       }
 
       body.innerHTML = html;
@@ -158,11 +176,23 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
   .sched-body :global(.sched-now .place) { font-family: var(--serif); font-size: 24px; font-weight: 900; line-height: 1.05; margin-bottom: 5px; }
   .sched-body :global(.sched-now .place a), .sched-body :global(.stop-place a) { color: inherit; text-decoration: none; }
   .sched-body :global(.sched-now .place a:hover), .sched-body :global(.stop-place a:hover) { text-decoration: underline; color: var(--terracotta); }
-  .sched-body :global(.sched-now .when) { font-size: 13.5px; opacity: 0.72; }
+  .sched-body :global(.sched-now .when) { font-size: 13.5px; opacity: 0.72; margin-bottom: 6px; }
+  .sched-body :global(.sched-now .addr) { font-size: 12.5px; }
 
-  .sched-body :global(.stop) { padding: 14px 18px; border-bottom: 1px solid var(--line-soft); display: flex; gap: 14px; align-items: baseline; }
+  .sched-body :global(.addr) {
+    display: block; font-size: 11.5px; opacity: 0.65; text-decoration: none; color: inherit;
+    margin-top: 3px; line-height: 1.35;
+  }
+  .sched-body :global(a.addr:hover) { text-decoration: underline; color: var(--terracotta); opacity: 1; }
+
+  .sched-body :global(.stop-list) { max-height: 480px; overflow-y: auto; }
+  .sched-body :global(.stop) { padding: 14px 18px; border-bottom: 1px solid var(--line-soft); display: flex; gap: 14px; align-items: flex-start; }
   .sched-body :global(.stop:last-child) { border-bottom: 0; }
-  .sched-body :global(.stop-day) { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--terracotta); width: 40px; flex-shrink: 0; }
+  .sched-body :global(.stop-day) {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--terracotta); width: 40px; flex-shrink: 0; line-height: 1.4; text-align: center;
+  }
+  .sched-body :global(.stop-info) { min-width: 0; flex: 1; }
   .sched-body :global(.stop-place) { font-weight: 600; font-size: 15px; line-height: 1.25; }
   .sched-body :global(.stop-when) { font-size: 12.5px; opacity: 0.62; margin-top: 2px; }
 </style>

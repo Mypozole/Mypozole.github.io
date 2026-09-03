@@ -15,7 +15,12 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
   data-unit-price={estimatedUnitPrice}
   data-email={site.email}
   data-formspree="https://formspree.io/f/xlgyqkpq"
+  data-payments-endpoint="https://mypozole-payments.vercel.app/api/create-payment-link"
 >
+  <div class="frozen-notice">
+    <strong>Prepackaged &amp; frozen, not hot.</strong> This ships or picks up sealed and ready to reheat at home, it is not the hot bowl served at the market or trailer.
+  </div>
+
   <div class="row">
     <div class="field">
       <label for="ob-protein">Protein</label>
@@ -50,8 +55,8 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
   </div>
   <p class="min-warning" id="ob-min-warning"></p>
   <p class="fine">
-    Estimated using the ${estimatedUnitPrice} retail pouch price, the confirmed online-order price per container hasn't
-    been set yet, final total is confirmed when we reply. ${onlineOrdering.minimumDollars} order minimum applies.
+    Priced using the ${estimatedUnitPrice} retail pouch rate, no separate online-order price has been set yet.
+    ${onlineOrdering.minimumDollars} order minimum applies. You'll pay this total now on Square's secure checkout.
     {onlineOrdering.fulfillsOnly}
   </p>
 
@@ -96,6 +101,14 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
     const unitPrice = Number(form.dataset.unitPrice);
     const email = form.dataset.email as string;
     const formspree = form.dataset.formspree as string;
+    const paymentsEndpoint = form.dataset.paymentsEndpoint as string;
+
+    if (new URLSearchParams(window.location.search).get('paid') === '1') {
+      form.style.display = 'none';
+      confirmEl.style.display = 'flex';
+      const reachEl = document.getElementById('ob-reach');
+      if (reachEl) reachEl.innerHTML = "Payment received, your order is in. We'll confirm pickup or delivery timing by email or phone.";
+    }
 
     const proteinSelect = document.getElementById('ob-protein') as HTMLSelectElement;
     const styleSelect = document.getElementById('ob-style') as HTMLSelectElement;
@@ -199,15 +212,34 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
             Items: lines,
             Fulfillment: isDelivery ? 'Delivery' : 'Pickup',
             'Delivery address': isDelivery ? address : 'N/A (pickup)',
-            'Estimated total': `$${total.toFixed(2)} (estimate, not confirmed or charged)`,
+            Total: `$${total.toFixed(2)}`,
             'First name': name,
             Contact: contact,
           }),
         });
         if (!res.ok) throw new Error('Formspree responded ' + res.status);
-        document.getElementById('ob-reach')!.innerHTML = `We'll confirm your order and the final price at <strong>${contact}</strong>. Nothing is charged now.`;
-        form.style.display = 'none';
-        confirmEl.style.display = 'flex';
+
+        submitBtn.textContent = 'Taking you to secure checkout...';
+        try {
+          const payRes = await fetch(paymentsEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: `MyPozole Online Order, ${lines.replace(/\n/g, ', ')}`,
+              amountCents: Math.round(total * 100),
+              redirectPath: `${window.location.pathname}?paid=1`,
+              buyerEmail: validEmail(contact) ? contact : undefined,
+            }),
+          });
+          const payData = await payRes.json();
+          if (!payRes.ok || !payData.url) throw new Error(payData.error || 'No payment URL returned');
+          window.location.href = payData.url;
+        } catch (payErr) {
+          console.error('Payment link creation failed', payErr);
+          document.getElementById('ob-reach')!.innerHTML = `We have your order but had trouble starting checkout. We'll follow up at <strong>${contact}</strong> to take payment.`;
+          form.style.display = 'none';
+          confirmEl.style.display = 'flex';
+        }
       } catch (err) {
         console.error('Online order submission failed', err);
         statusEl.textContent = `Something went wrong. Please email your order to ${email}.`;
@@ -228,6 +260,13 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
     border: 1.5px solid var(--terracotta); border-radius: 4px; padding: var(--space-3);
     background: var(--paper); display: grid; gap: var(--space-2); margin-bottom: var(--space-3);
   }
+  .frozen-notice {
+    display: flex; align-items: baseline; gap: 6px; font-size: 13px; line-height: 1.5;
+    background: var(--paper-warm); border: 1px solid var(--tan); border-radius: 3px;
+    padding: 10px 12px; color: var(--brown);
+  }
+  .frozen-notice::before { content: "❄️"; flex-shrink: 0; }
+  .frozen-notice strong { color: var(--rust); }
   .row { display: grid; grid-template-columns: 1fr 1fr 80px auto; gap: var(--space-1); align-items: end; }
   @media (max-width: 560px) { .row { grid-template-columns: 1fr 1fr; } .row .add-btn { grid-column: 1 / -1; } }
   .field label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }

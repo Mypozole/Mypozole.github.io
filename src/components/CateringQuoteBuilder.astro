@@ -12,6 +12,7 @@ const d = cateringData.dropOff;
   data-large-min="51"
   data-email={site.email}
   data-formspree="https://formspree.io/f/xlgyqkpq"
+  data-payments-endpoint="https://mypozole-payments.vercel.app/api/create-payment-link"
 >
   <div class="hide-large">
     <p class="c-eyebrow">Your order</p>
@@ -85,7 +86,7 @@ const d = cateringData.dropOff;
       </div>
       <button type="submit" class="btn submit" id="qb-submit">Send My Order Request</button>
       <div class="note" id="qb-note"></div>
-      <div class="simple">Free delivery. No deposit. You only pay once we confirm.</div>
+      <div class="simple">Free delivery. 50% deposit due now to hold your date.</div>
     </div>
   </div>
 
@@ -115,6 +116,14 @@ const d = cateringData.dropOff;
     const LARGE_MIN = Number(form.dataset.largeMin);
     const EMAIL = form.dataset.email as string;
     const FORMSPREE = form.dataset.formspree as string;
+    const PAYMENTS_ENDPOINT = form.dataset.paymentsEndpoint as string;
+
+    if (new URLSearchParams(window.location.search).get('paid') === '1') {
+      form.style.display = 'none';
+      confirmEl.style.display = 'flex';
+      document.getElementById('qb-summary')!.innerHTML = '';
+      document.getElementById('qb-reach')!.innerHTML = "Deposit received, you're booked. We'll confirm the rest of the details by email or phone.";
+    }
 
     const $ = (id: string) => document.getElementById(id) as HTMLElement;
     const quarts = $('qb-quarts') as HTMLInputElement;
@@ -156,7 +165,7 @@ const d = cateringData.dropOff;
       $('qb-total').textContent = fmt(q * PRICE);
       $('qb-feeds').textContent = `Feeds approximately ${q * 2} to ${q * 3} people`;
       $('qb-lead').textContent = t.msg;
-      $('qb-note').textContent = `We'll confirm your order within ${t.hrs} hours based on your order size. You'll hear from us at the contact info you provided. Nothing is charged now.`;
+      $('qb-note').textContent = `We'll confirm your order within ${t.hrs} hours based on your order size. Next, you'll pay a 50% deposit (${fmt(Math.round(q * PRICE * 0.5))}) on Square's secure checkout to hold your date.`;
       dateEl.min = isoPlusDays(t.hrs / 24);
       if (dateEl.value && dateEl.value < dateEl.min) dateEl.value = '';
       ($('qb-minus') as HTMLButtonElement).disabled = q <= MIN;
@@ -244,10 +253,31 @@ const d = cateringData.dropOff;
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify(payload),
         });
-        if (res.ok) {
+        if (!res.ok) throw new Error('Formspree responded ' + res.status);
+
+        const contact = payload.Contact;
+        const depositCents = Math.round(q * PRICE * 0.5 * 100);
+        submitBtn.textContent = 'Taking you to secure checkout...';
+
+        try {
+          const payRes = await fetch(PAYMENTS_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: `MyPozole Catering Deposit, ${q} quarts, ${dateEl.value}`,
+              amountCents: depositCents,
+              redirectPath: `${window.location.pathname}?paid=1`,
+              buyerEmail: validEmail(contact) ? contact : undefined,
+            }),
+          });
+          const payData = await payRes.json();
+          if (!payRes.ok || !payData.url) throw new Error(payData.error || 'No payment URL returned');
+          window.location.href = payData.url;
+        } catch (payErr) {
+          console.error('Payment link creation failed', payErr);
           showConfirm();
-        } else {
-          throw new Error('Formspree responded ' + res.status);
+          $('qb-note').textContent = '';
+          document.getElementById('qb-reach')!.innerHTML += ` We had trouble starting checkout for the 50% deposit, we'll follow up directly to collect it.`;
         }
       } catch (err) {
         console.error('Catering order submission failed', err);

@@ -1,0 +1,16 @@
+{
+  "source": "Owner call notes 2026-08-31 (Drive doc \"mypozole call notes\"), confirmed 2026-09-02. This page is what the printed QR code on packaging points to.",
+  "reviews": {
+    "google": "https://www.google.com/maps?cid=16100850366274622676",
+    "googleNote": "Verified live 2026-09-02 by looking up the real MyPozole Google Business listing, links straight to the profile where 'Write a review' is one tap away.",
+    "yelp": "https://www.yelp.com/biz/my-pozole-san-diego",
+    "yelpNote": "Verified live 2026-09-02, the real MyPozole Yelp business page (5.0 stars, 17 reviews at the time)."
+  },
+  "mailingList": {
+    "headline": "Get 10% off your next order",
+    "body": "Join the list for MyPozole news, market schedule surprises, and first word on new flavors. One discount code, sent once you sign up.",
+    "buttonLabel": "Send my code",
+    "formspree": "https://formspree.io/f/xlgyqkpq",
+    "editNote": "headline/body/buttonLabel are the only fields meant to change here. Edit this JSON file and push to update the live copy, still a real deploy (no CMS live yet, Sveltia is on hold per TODO item 29), but it's a one-file, one-line edit, not a layout change."
+  }
+}

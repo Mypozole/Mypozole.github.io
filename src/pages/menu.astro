@@ -15,6 +15,7 @@ import onlineOrdering from '../data/online-ordering.json';
         Everything else on this page is market and trailer only, since the
         commissary can't fulfill it.
       </p>
+      <a href="/downloads/mypozole-full-menu.pdf" download class="menu-pdf-link">Download the full menu (PDF) →</a>
     </header>
     <div class="order-section" id="order">
       <p class="label">Order Pozole online</p>
@@ -28,6 +29,11 @@ import onlineOrdering from '../data/online-ordering.json';
   .page-head { padding: var(--space-6) 0 var(--space-3); }
   .page-head h1 { margin-bottom: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
+  .menu-pdf-link {
+    display: inline-block; margin-top: var(--space-2); font-size: 14px; font-weight: 700;
+    color: var(--terracotta); text-decoration: none;
+  }
+  .menu-pdf-link:hover { text-decoration: underline; }
   .order-section { max-width: 480px; margin-top: var(--space-3); }
   .order-section .label { margin-bottom: var(--space-2); }
 </style>
