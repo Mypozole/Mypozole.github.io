@@ -103,19 +103,22 @@ See `PHOTOS-NEEDED.md` for exact file paths. Short version:
     Profile in Featurable and build a widget there, send me the embed
     snippet (script tag + div, or an iframe URL) and I'll drop it into
     the testimonials section, no API key needed for a standard embed.
-28. ~~**Real checkout/payments**~~ **Mostly resolved 2026-09-02.** Switched
-    to Square (Jorge's real, active account) instead of Stripe, using
+28. ~~**Real checkout/payments**~~ **Live 2026-09-02.** Switched to Square
+    (Jorge's real, active account) instead of Stripe, using
     `CreatePaymentLink` for a real Square-hosted checkout page. Home/Office
-    Catering (50% deposit) and the online order builder both now redirect
-    to Square to actually pay, via a new tiny backend
-    (`Mypozole/mypozole-payments` on Vercel, since GitHub Pages can't run
-    server code). **One manual step left, only you can do it:** set
-    `SQUARE_ACCESS_TOKEN` (your production token from
-    developer.squareup.com) as an environment variable directly in the
-    Vercel dashboard for that project, don't send it in chat. Until it's
-    set, both checkouts fail gracefully and fall back to "we'll follow up
-    to collect payment." Events Catering (Pozole Party) still isn't wired
-    to payments, it has no real request form yet, just a mailto link.
+    Catering (50% deposit) and the online order builder both redirect to
+    a real Square checkout and were tested end to end with a real $5 test
+    link. Backend is `Mypozole/mypozole-payments` on Vercel (under the
+    `mypozole` team account, not personal), since GitHub Pages can't run
+    server code, deployed at `mypozole-payments-mypozole.vercel.app`.
+    `SQUARE_ACCESS_TOKEN` is set. Events Catering (Pozole Party) still
+    isn't wired to payments, it has no real request form yet, just a
+    mailto link, that's a separate future build.
+    **Loose end:** there's also an old, unconfigured deploy of this same
+    code sitting at `mypozole-payments.vercel.app` under Eduardo's
+    personal Vercel account (`busta2`), from before we moved it to your
+    team account. It has no Square token set and nothing points at it
+    anymore, safe to delete whenever, or just ignore it.
 29. **Sveltia CMS** (Jorge's own no-code editing panel), on hold per your
     request, revisit whenever you want to pick it back up.
 
