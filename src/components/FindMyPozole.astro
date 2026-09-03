@@ -24,14 +24,17 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
     end: string;
   }
 
+  // MyPozole operates only in San Diego, always show Pacific time regardless
+  // of the visitor's own device/browser timezone, never the viewer's local zone.
+  const PACIFIC = 'America/Los_Angeles';
   function fmtTime(iso: string): string {
-    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: PACIFIC });
   }
   function fmtDay(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { weekday: 'short' });
+    return new Date(iso).toLocaleDateString('en-US', { weekday: 'short', timeZone: PACIFIC });
   }
   function fmtDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: PACIFIC });
   }
 
   async function fetchCalendar(calendarId: string, apiKey: string): Promise<CalEvent[]> {
@@ -70,7 +73,10 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
       const events = [...farmers, ...popup, ...foodTruck].sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 
       const now = new Date();
-      const live = events.find((e) => new Date(e.start) <= now && now <= new Date(e.end));
+      const isLive = (e: CalEvent) => new Date(e.start) <= now && now <= new Date(e.end);
+      const liveEvents = events.filter(isLive);
+      const live = liveEvents[0];
+      const otherLive = liveEvents.slice(1);
       const upcoming = events.filter((e) => new Date(e.start) > now);
 
       if (!live && upcoming.length === 0) {
@@ -123,14 +129,15 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
         </div>`;
       }
 
-      const rest = live ? upcoming : upcoming.slice(1);
+      const rest = [...otherLive, ...(live ? upcoming : upcoming.slice(1))];
       if (rest.length > 0) {
         html += '<div class="stop-list">';
         for (const e of rest) {
+          const liveTag = isLive(e) ? '<span class="stop-live">Live now</span>' : '';
           html += `<div class="stop">
             <span class="stop-day">${fmtDay(e.start)}<br>${fmtDate(e.start)}</span>
             <div class="stop-info">
-              <div class="stop-place">${placeLink(e.summary, e.location)}</div>
+              <div class="stop-place">${placeLink(e.summary, e.location)}${liveTag}</div>
               <div class="stop-when">${fmtTime(e.start)} to ${fmtTime(e.end)}</div>
               ${addressLine(e.summary, e.location)}
             </div>
@@ -194,5 +201,10 @@ const foodTruckId = import.meta.env.PUBLIC_CALENDAR_ID_FOOD_TRUCK;
   }
   .sched-body :global(.stop-info) { min-width: 0; flex: 1; }
   .sched-body :global(.stop-place) { font-weight: 600; font-size: 15px; line-height: 1.25; }
+  .sched-body :global(.stop-live) {
+    display: inline-block; margin-left: 7px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #fff; background: #7BC47F; padding: 2px 7px; border-radius: 10px;
+    vertical-align: middle;
+  }
   .sched-body :global(.stop-when) { font-size: 12.5px; opacity: 0.62; margin-top: 2px; }
 </style>

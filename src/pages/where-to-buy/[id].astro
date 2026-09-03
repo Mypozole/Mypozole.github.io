@@ -94,7 +94,7 @@ const photos: Record<string, ImageMetadata> = {
           const events = (data.items ?? []).filter((e) => e.start?.dateTime);
           const match = events.find((e) => `${e.summary ?? ''} ${e.location ?? ''}`.toLowerCase().includes(firstWord));
           if (match) {
-            const date = new Date(match.start.dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            const date = new Date(match.start.dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/Los_Angeles' });
             slot.textContent = `Next demo: ${date}`;
           }
         } catch (err) {

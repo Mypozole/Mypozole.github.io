@@ -61,7 +61,7 @@ const locations = await getCollection('locations');
             const match = events.find((e) => `${e.summary ?? ''} ${e.location ?? ''}`.toLowerCase().includes(firstWord));
             const slot = store.querySelector('[data-demo-slot]');
             if (match && slot) {
-              const date = new Date(match.start.dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+              const date = new Date(match.start.dateTime).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'America/Los_Angeles' });
               slot.textContent = `Next demo: ${date}`;
             }
           });
