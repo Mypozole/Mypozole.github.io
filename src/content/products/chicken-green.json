@@ -18,5 +18,6 @@
     "sugarGrams": 5,
     "proteinGrams": 25
   },
-  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2)."
+  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2).",
+  "description": "White and dark meat chicken slow cooked for 8 hours in a tomatillo and serrano broth, real heat from the serranos themselves. 25g of protein and meaningfully more Vitamin C than our other styles."
 }

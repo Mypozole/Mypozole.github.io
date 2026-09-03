@@ -72,6 +72,7 @@ const photos: Record<string, ImageMetadata> = {
                 )}
               </div>
               <p class="sku-label">{proteinLabel[p!.data.protein]} {styleLabel[p!.data.style]}</p>
+              <p class="sku-desc">{p!.data.description}</p>
             </div>
           );
         })}
@@ -121,5 +122,6 @@ const photos: Record<string, ImageMetadata> = {
   .sku-photo { aspect-ratio: 3/4; background: var(--sand-pale); display: flex; align-items: center; justify-content: center; }
   .sku-photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .sku-placeholder { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--rust); opacity: 0.6; text-align: center; padding: var(--space-1); }
-  .sku-label { font-size: 13px; font-weight: 600; padding: 10px 12px; }
+  .sku-label { font-size: 13px; font-weight: 600; padding: 10px 12px 4px; }
+  .sku-desc { font-size: 12px; line-height: 1.5; opacity: 0.68; padding: 0 12px 12px; }
 </style>

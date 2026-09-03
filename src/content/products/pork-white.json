@@ -18,5 +18,6 @@
     "sugarGrams": 4,
     "proteinGrams": 24
   },
-  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2)."
+  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2).",
+  "description": "Hominy simmered in broth with pork slow cooked for 8 hours until it pulls apart easily, our original family recipe. 24g of protein and 5g of fiber per serving."
 }

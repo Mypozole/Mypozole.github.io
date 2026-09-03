@@ -28,6 +28,7 @@ const products = defineCollection({
       proteinGrams: z.number(),
     }),
     labelFormatIssue: z.string().nullable(),
+    description: z.string(),
   }),
 });
 

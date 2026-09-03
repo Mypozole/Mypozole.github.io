@@ -18,5 +18,6 @@
     "sugarGrams": 6,
     "proteinGrams": 26
   },
-  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2)."
+  "labelFormatIssue": "Pouch label is on pre-2016 FDA format (no Added Sugars line, uses Calories from Fat) and net weight math is off: 2 servings at 454g should total 907g, not the 454g printed on some pouch fronts. Confirmed real issue, correction pending on next print run (MyPozole_Claude_Design_Build_Brief.md section 2). Separate flag 2026-09-03: a new AI-generated packaging render (approved for use on Where to Buy despite being AI, see PHOTOS-NEEDED.md) shows a 25g protein badge on this pouch, one gram off from the 26g used here from MyPozole_Claude_Design_Build_Brief.md. Since that render isn't a real photographed label, not treating it as authoritative, keeping 26g until a real pouch photo settles it.",
+  "description": "Chicken slow cooked for 8 hours in a broth built on guajillo chiles. 26g of protein and 50% of your daily Vitamin A, heat comes separately from chile flakes, not the broth."
 }
