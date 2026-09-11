@@ -1,10 +1,15 @@
 ---
 import CateringPage from '../../components/CateringPage.astro';
+import officeHero from '../../assets/photos/office-catering-hero.jpg';
 ---
 <CateringPage
   eyebrow="Office Catering"
   title="Feed your team."
   intro="Office lunches and recurring team orders. Same drop-off mechanics as Home Catering, headcount-based quoting, with invoicing available for businesses."
+  heroPhoto={officeHero}
+  heroAlt="A MyPozole catering bag being handed off at an office front desk."
+  testimonialQuote="All our employees are still raving about the delicious pozole you made for us. It was such a huge hit with the team."
+  testimonialAttr="Sofia E., Corporate Catering"
   otherDoors={[
     { label: 'Feeding your family instead? See Home Catering →', href: '/catering/home' },
     { label: 'Something bigger? See Events →', href: '/catering/events' },

@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CateringQuoteBuilder from './CateringQuoteBuilder.astro';
 import cateringData from '../data/catering-pricing.json';
 import site from '../data/site.json';
+import { Image } from 'astro:assets';
 
 interface Props {
   eyebrow: string;
@@ -11,26 +12,41 @@ interface Props {
   otherDoors: { label: string; href: string }[];
   showDropOff?: boolean;
   showPartyPackages?: boolean;
+  heroPhoto?: ImageMetadata;
+  heroAlt?: string;
+  testimonialQuote?: string;
+  testimonialAttr?: string;
 }
 
-const { eyebrow, title, intro, otherDoors, showDropOff = true, showPartyPackages = false } = Astro.props;
+const {
+  eyebrow, title, intro, otherDoors, showDropOff = true, showPartyPackages = false,
+  heroPhoto, heroAlt = '', testimonialQuote = '', testimonialAttr = '',
+} = Astro.props;
 const party = cateringData.pozolePartyPackages;
 const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole Party inquiry')}`;
 ---
 <BaseLayout title={`${title} | MyPozole Catering`} description={intro}>
   <div class="wrap">
-    <header class="page-head">
-      <p class="label">{eyebrow}</p>
-      <h1>{title}</h1>
-      <p class="intro">{intro}</p>
-    </header>
+    <div class:list={['hero-row', { 'has-photo': heroPhoto }]}>
+      <header class="page-head">
+        <p class="label">{eyebrow}</p>
+        <h1>{title}</h1>
+        <p class="intro">{intro}</p>
+      </header>
+
+      {heroPhoto && (
+        <div class="page-hero">
+          <Image src={heroPhoto} alt={heroAlt} width={760} height={950} />
+        </div>
+      )}
+    </div>
 
     {showDropOff && (
       <div class="builder-section">
         <p class="label">Build your order</p>
         <h2>Get a price in 20 seconds.</h2>
         <p class="builder-lead">Pick your quarts, see your total, send it to us. We confirm within hours. Nothing is charged now.</p>
-        <CateringQuoteBuilder />
+        <CateringQuoteBuilder testimonialQuote={testimonialQuote} testimonialAttr={testimonialAttr} />
       </div>
     )}
 
@@ -90,8 +106,23 @@ const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole
 </BaseLayout>
 
 <style>
-  .page-head { padding: var(--space-6) 0 var(--space-3); }
+  .hero-row { padding: var(--space-6) 0 var(--space-4); }
+  .hero-row.has-photo {
+    display: grid; grid-template-columns: 1fr 360px; gap: var(--space-5); align-items: center;
+  }
+  @media (max-width: 760px) {
+    .hero-row.has-photo { grid-template-columns: 1fr; gap: var(--space-3); }
+  }
+  .page-head { padding: 0; }
+  .hero-row.has-photo .page-head { padding-right: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
+
+  .page-hero {
+    aspect-ratio: 4 / 5; width: 100%; border-radius: 6px; overflow: hidden; background: var(--sand);
+    box-shadow: 0 8px 22px rgba(81, 26, 11, 0.16);
+  }
+  .page-hero :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  @media (max-width: 760px) { .page-hero { max-width: 340px; margin: 0 auto; } }
 
   .builder-section { text-align: center; padding-bottom: var(--space-4); }
   .builder-section .label { justify-content: center; display: flex; }

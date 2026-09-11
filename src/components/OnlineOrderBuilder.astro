@@ -228,7 +228,6 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
               name: `MyPozole Online Order, ${lines.replace(/\n/g, ', ')}`,
               amountCents: Math.round(total * 100),
               redirectPath: `${window.location.pathname}?paid=1`,
-              buyerEmail: validEmail(contact) ? contact : undefined,
             }),
           });
           const payData = await payRes.json();

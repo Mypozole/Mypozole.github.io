@@ -1,6 +1,13 @@
 ---
 import cateringData from '../data/catering-pricing.json';
 import site from '../data/site.json';
+
+interface Props {
+  testimonialQuote: string;
+  testimonialAttr: string;
+}
+
+const { testimonialQuote, testimonialAttr } = Astro.props;
 const d = cateringData.dropOff;
 ---
 <form
@@ -37,9 +44,9 @@ const d = cateringData.dropOff;
 
     <div class="flavor">Pork, chicken, or vegan, or any mix. Your flavor split is confirmed when we accept your order.</div>
 
-    <div class="quote">
-      <p>&ldquo;All our employees are still raving about the delicious pozole you made for us. It was such a huge hit with the team.&rdquo;</p>
-      <div class="attr">&mdash; Sofia E., Corporate Catering</div>
+    <div class:list={['quote', { 'is-todo': !testimonialAttr }]}>
+      <p>{testimonialAttr ? <>&ldquo;{testimonialQuote}&rdquo;</> : testimonialQuote}</p>
+      {testimonialAttr && <div class="attr">&mdash; {testimonialAttr}</div>}
     </div>
 
     <div class="details">
@@ -267,7 +274,6 @@ const d = cateringData.dropOff;
               name: `MyPozole Catering Deposit, ${q} quarts, ${dateEl.value}`,
               amountCents: depositCents,
               redirectPath: `${window.location.pathname}?paid=1`,
-              buyerEmail: validEmail(contact) ? contact : undefined,
             }),
           });
           const payData = await payRes.json();
@@ -329,6 +335,8 @@ const d = cateringData.dropOff;
   .quote { background: var(--paper-warm); border-radius: 4px; padding: 14px 16px; margin: var(--space-2) 0 0; }
   .quote p { font-size: 13.5px; font-style: italic; line-height: 1.5; }
   .quote .attr { font-style: normal; font-weight: 700; font-size: 12.5px; color: var(--terracotta); margin-top: 8px; }
+  .quote.is-todo { background: transparent; border: 1.5px dashed var(--rust); }
+  .quote.is-todo p { font-style: normal; font-weight: 700; color: var(--rust); }
 
   .details { margin-top: var(--space-3); }
   .field { margin-bottom: 14px; }

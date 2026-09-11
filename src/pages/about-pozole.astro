@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import photoFounder from '../assets/photos/founder.jpg';
+import photoAzteca from '../assets/photos/about-pozole-azteca.jpg';
 
 const founding = await getEntry('stories', 'founding-story');
 ---
@@ -14,15 +15,20 @@ const founding = await getEntry('stories', 'founding-story');
     </header>
 
     <section class="history">
-      <p>
-        Pozole's name comes from the Nahuatl word <em>pozolli</em>, meaning
-        foamy or frothy, a reference to how the corn looks as it cooks down
-        into hominy. The dish itself predates the Spanish arrival in Mexico
-        by centuries, eaten across Mesoamerica under Aztec rule as early as
-        the 1300s. Corn wasn't just food to the Aztecs, it was sacred, tied
-        directly to their origin stories, and pozole was reserved for
-        ceremonial occasions rather than eaten as an everyday meal.
-      </p>
+      <div class="history-row">
+        <p>
+          Pozole's name comes from the Nahuatl word <em>pozolli</em>, meaning
+          foamy or frothy, a reference to how the corn looks as it cooks down
+          into hominy. The dish itself predates the Spanish arrival in Mexico
+          by centuries, eaten across Mesoamerica under Aztec rule as early as
+          the 1300s. Corn wasn't just food to the Aztecs, it was sacred, tied
+          directly to their origin stories, and pozole was reserved for
+          ceremonial occasions rather than eaten as an everyday meal.
+        </p>
+        <div class="history-photo">
+          <Image src={photoAzteca} alt="Aztec-era codex illustration of hominy being prepared, a public domain historical image" width={768} height={505} />
+        </div>
+      </div>
       <p>
         In this family, it starts with big cuts of pork, browned first,
         then simmered low until tender enough to pull apart by hand. That
@@ -78,6 +84,14 @@ const founding = await getEntry('stories', 'founding-story');
   .history { padding-bottom: var(--space-4); }
   .history p { font-size: 16.5px; line-height: 1.7; opacity: 0.82; max-width: 68ch; margin-bottom: var(--space-2); }
   .history em { font-style: italic; color: var(--rust); font-weight: 600; }
+
+  .history-row { display: grid; grid-template-columns: 1fr 260px; gap: var(--space-4); align-items: center; }
+  @media (max-width: 700px) { .history-row { grid-template-columns: 1fr; } }
+  .history-photo {
+    aspect-ratio: 768 / 505; border-radius: 4px; overflow: hidden; background: var(--sand-pale);
+    box-shadow: 0 4px 14px rgba(81, 26, 11, 0.12);
+  }
+  .history-photo :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .styles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-bottom: var(--space-4); }
   @media (max-width: 760px) { .styles { grid-template-columns: 1fr; } }

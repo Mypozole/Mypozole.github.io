@@ -1,10 +1,14 @@
 ---
 import CateringPage from '../../components/CateringPage.astro';
+import homeHero from '../../assets/photos/home-catering-hero.jpg';
 ---
 <CateringPage
   eyebrow="Home Catering"
   title="Feed your family."
   intro="Family dinners and home gatherings, dropped off hot with toppings on the side."
+  heroPhoto={homeHero}
+  heroAlt="Close-up of someone eating a bowl of MyPozole at home."
+  testimonialQuote="TODO: real home catering testimonial"
   otherDoors={[
     { label: 'Bigger group? See Events →', href: '/catering/events' },
     { label: 'Ordering for the office? See Office Catering →', href: '/catering/office' },
