@@ -35,7 +35,18 @@ these areas.
   pouch price as a labeled estimate, since no confirmed price exists for
   the "32oz Prepackaged" hot online-order container specifically. May or
   may not be the same price as the retail pouch, confirm before this
-  becomes a real checkout.
+  becomes a real checkout. Note the retail pouch itself is now also
+  separately orderable online at the real, confirmed $15.99
+  (`src/components/RetailPouchOrderBuilder.astro`, added 2026-09-11), so
+  this estimate is doing double duty for two now-distinct products,
+  worth resolving with a real Take Home Pozole price.
+- **Full Menu PDF, priced version**: `scripts/generate-menu-pdf.py`
+  (added 2026-09-11) can build a priced PDF alongside the unpriced one,
+  but every item's price in its `ITEM_PRICES` dict is `None`. No real
+  price exists anywhere in this repo or the handoff packet for Pozole
+  (cup), Pozole Burrito, Poztada, Poznachos, Pozfrito, or Take Home
+  Pozole. Fill in real numbers there and rerun the script to get the
+  priced PDF; only the unpriced one is built (and linked) until then.
 - **Cup serving-size fix**: the brief flags that Chicken White's cup label
   wrongly lists "1 Cup (473mL)" (volume-based) instead of "1 Cup (454g)"
   like the other two whites. Confirmed as a real production issue, not yet
@@ -50,6 +61,20 @@ these areas.
   Also worth noting: that same photo shows net weight correctly printed
   as 907g, so the brief's separate "net weight math is off" warning may
   already be fixed on this print run, also not fully confirmed.
+
+## Wholesale/freezer photo label, flagged 2026-09-11
+
+`src/assets/photos/wholesale-freezer-hero.jpg` (used on `/wholesale` and
+every `/where-to-buy/[store]` page) shows a pouch whose printed label
+reads "Net Wt. 32oz (454g) · 2 Servings." That's the same math error the
+brief already warned about: 454g is the *per-serving* weight (matches
+`nutrition.servingSize: "1 Cup (454g)"` in every product record), so a
+real 2-serving pouch's net weight should read ~907g, the way the
+separately-verified real photographed label already does (see the Pork
+Red protein-conflict note above). Reported to Jorge 2026-09-11, not
+fixed yet, waiting to confirm this is really just the printed label and
+not something else (flavor/branding) before treating it as a simple
+crop-and-replace.
 
 ## Wholesale record gaps
 

@@ -1,6 +1,6 @@
 {
   "name": "Poznachos",
-  "order": 4,
+  "order": 5,
   "description": "Tortilla chips underneath the whole thing, eaten fast.",
   "fulfillment": "market-and-trailer-only",
   "fulfillmentNote": "No commissary path, market and trailer only.",

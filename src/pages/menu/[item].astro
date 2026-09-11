@@ -54,12 +54,14 @@ const isDeliverable = item.data.fulfillment === 'delivery-or-pickup';
       </div>
     </div>
 
-    <section class="find-section">
-      <h2>{isPozole ? 'Find it hot, or buy it frozen' : 'Find it at the market or trailer'}</h2>
-      <div class="find-grid">
-        <FindMyPozole />
-      </div>
-    </section>
+    {!isDeliverable && (
+      <section class="find-section">
+        <h2>{isPozole ? 'Find it hot, or buy it frozen' : 'Find it at the market or trailer'}</h2>
+        <div class="find-grid">
+          <FindMyPozole />
+        </div>
+      </section>
+    )}
   </div>
 
   {isPozole && <WhereToBuyTeaser />}

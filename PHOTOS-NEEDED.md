@@ -19,6 +19,13 @@ change too."
 
 ## Add new photos (no current photo at all)
 
+- **Take Home Pozole, added 2026-09-11**: new menu item (split out of
+  "Pozole" as its own delivery/pickup product, see `TODO.md` 2026-09-11).
+  `src/pages/menu/[item].astro` falls back to a text placeholder since
+  `takehome-pozole` has no entry in its `photos` map yet. A real photo
+  of the sealed frozen quart would need a code change too, since that
+  map is still hardcoded per item id.
+
 - ~~**All 5 menu item photos**~~ **Resolved 2026-09-03.** Owner supplied
   a matched 5-photo set (Pozole, Pozole Burrito, Poztada, Poznachos,
   Pozfrito) via a Drive folder, plainly named per item (no AI-tool

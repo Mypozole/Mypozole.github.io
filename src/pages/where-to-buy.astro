@@ -2,37 +2,84 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import photoPorkWhite from '../assets/photos/takehome_pork_white.jpg';
 import photoPorkRed from '../assets/photos/takehome_pork_red.jpg';
+import photoPorkGreen from '../assets/photos/takehome_pork_green.jpg';
+import photoChickenWhite from '../assets/photos/takehome_chicken_white.jpg';
+import photoChickenRed from '../assets/photos/takehome_chicken_red.jpg';
 import photoChickenGreen from '../assets/photos/takehome_chicken_green.jpg';
+import photoVeganWhite from '../assets/photos/takehome_vegan_white.jpg';
+import photoVeganRed from '../assets/photos/takehome_vegan_red.jpg';
+import photoVeganGreen from '../assets/photos/takehome_vegan_green.jpg';
 
 const locations = await getCollection('locations');
+const stock = await getCollection('stock');
+const products = await getCollection('products');
+
+const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 'Green' };
+const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
+
+const photos: Record<string, ImageMetadata> = {
+  'pork-white': photoPorkWhite,
+  'pork-red': photoPorkRed,
+  'pork-green': photoPorkGreen,
+  'chicken-white': photoChickenWhite,
+  'chicken-red': photoChickenRed,
+  'chicken-green': photoChickenGreen,
+  'vegan-white': photoVeganWhite,
+  'vegan-red': photoVeganRed,
+  'vegan-green': photoVeganGreen,
+};
+
+const proteinOrder = ['pork', 'chicken', 'vegan'];
+const styleOrder = ['white', 'red', 'green'];
+const sortedProducts = [...products].sort((a, b) => {
+  const p = proteinOrder.indexOf(a.data.protein) - proteinOrder.indexOf(b.data.protein);
+  return p !== 0 ? p : styleOrder.indexOf(a.data.style) - styleOrder.indexOf(b.data.style);
+});
+
+const storesBySku: Record<string, { id: string; name: string; city: string }[]> = {};
+for (const p of sortedProducts) {
+  storesBySku[p.id] = stock
+    .filter((s) => s.data.carries.includes(p.id))
+    .map((s) => locations.find((l) => l.id === s.data.locationId))
+    .filter((l): l is NonNullable<typeof l> => Boolean(l))
+    .map((l) => ({ id: l.id, name: l.data.name, city: l.data.city }));
+}
 ---
-<BaseLayout title="Where to Buy | MyPozole" description="Every store carrying MyPozole. Click a store to see what's in stock there.">
+<BaseLayout title="Where to Buy | MyPozole" description="Every store carrying MyPozole. Click a flavor to see which stores carry it.">
   <div class="wrap">
     <header class="page-head">
       <p class="label">Where to buy</p>
       <h1>Take home a pouch.</h1>
       <p class="intro">
         Frozen 32oz pouches, $15.99, ready to heat on the stove. Click a
-        store to see exactly what's stocked there before you drive over.
+        flavor below to see which stores carry it.
       </p>
     </header>
 
-    <div class="pouches">
-      <div class="pouch-photo">
-        <Image src={photoPorkRed} alt="MyPozole Red Style Pork Pozole pouch, 32oz" width={500} height={667} />
-        <p>Red Style Pork, 24g protein</p>
-      </div>
-      <div class="pouch-photo">
-        <Image src={photoChickenGreen} alt="MyPozole Green Style Chicken Pozole pouch, 32oz" width={500} height={667} />
-        <p>Green Style Chicken, 25g protein</p>
-      </div>
-      <div class="pouch-note">
-        <p><b>What to look for in the freezer aisle.</b></p>
-        <p>Two servings per pouch. Toppings (cabbage, radishes, onions, jalapeños, cilantro, oregano, red pepper flakes, limes, avocado) are not included, add your own at home.</p>
-      </div>
+    <div class="sku-grid">
+      {sortedProducts.map((p) => (
+        <button type="button" class="sku-tile" data-sku={p.id}>
+          <div class="sku-photo">
+            <Image src={photos[p.id]} alt={`MyPozole ${proteinLabel[p.data.protein]} ${styleLabel[p.data.style]} pouch, 32oz`} width={360} height={480} />
+          </div>
+          <p class="sku-name">{proteinLabel[p.data.protein]} {styleLabel[p.data.style]}</p>
+        </button>
+      ))}
     </div>
 
+    <div class="stock-panel" id="stock-panel" hidden>
+      <p class="stock-title" id="stock-title">Carried at:</p>
+      <div class="stock-stores" id="stock-stores"></div>
+    </div>
+
+    <div class="pouch-note">
+      <p><b>What to look for in the freezer aisle.</b></p>
+      <p>Two servings per pouch. Toppings (cabbage, radishes, onions, jalapeños, cilantro, oregano, red pepper flakes, limes, avocado) are not included, add your own at home.</p>
+    </div>
+
+    <h2 class="stores-h">All stores</h2>
     <div class="stores">
       {locations.map((loc) => (
         <a href={`/where-to-buy/${loc.id}`} class="store" data-store-name={loc.data.name}>
@@ -72,6 +119,37 @@ const locations = await getCollection('locations');
       loadNextDemos();
     </script>
 
+    <script define:vars={{ storesBySku, proteinLabel, styleLabel }}>
+      const panel = document.getElementById('stock-panel');
+      const title = document.getElementById('stock-title');
+      const storesEl = document.getElementById('stock-stores');
+
+      document.querySelectorAll('.sku-tile').forEach((tile) => {
+        tile.addEventListener('click', () => {
+          const isActive = tile.classList.contains('is-active');
+          document.querySelectorAll('.sku-tile').forEach((t) => t.classList.remove('is-active'));
+
+          if (isActive) {
+            panel.hidden = true;
+            return;
+          }
+          tile.classList.add('is-active');
+
+          const sku = tile.getAttribute('data-sku');
+          const [protein, style] = sku.split('-');
+          const stores = storesBySku[sku] ?? [];
+          title.textContent = `${proteinLabel[protein]} ${styleLabel[style]}, carried at:`;
+
+          storesEl.innerHTML = stores.length
+            ? stores.map((s) => `<a href="/where-to-buy/${s.id}" class="stock-store">${s.name}<span>${s.city}</span></a>`).join('')
+            : `<p class="stock-empty">Not confirmed at any store yet.</p>`;
+
+          panel.hidden = false;
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+      });
+    </script>
+
     <div class="ask">
       <div>
         <h3>Not stocked near you?</h3>
@@ -87,16 +165,41 @@ const locations = await getCollection('locations');
   .page-head h1 { margin-bottom: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
 
-  .pouches { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: var(--space-2); margin-bottom: var(--space-4); }
-  @media (max-width: 760px) { .pouches { grid-template-columns: 1fr 1fr; } .pouch-note { grid-column: 1 / -1; } }
-  .pouch-photo { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); }
-  .pouch-photo :global(img) { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
-  .pouch-photo p { font-size: 12.5px; font-weight: 600; padding: 10px 12px; opacity: 0.75; }
-  .pouch-note { border: 1px solid var(--line); border-radius: 4px; background: var(--paper-warm); padding: var(--space-3); display: flex; flex-direction: column; justify-content: center; }
+  .sku-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin-bottom: var(--space-3); }
+  @media (max-width: 640px) { .sku-grid { grid-template-columns: repeat(2, 1fr); } }
+  .sku-tile {
+    border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper);
+    padding: 0; cursor: pointer; text-align: left; font: inherit; color: inherit; transition: border-color 0.15s;
+  }
+  .sku-tile:hover { border-color: var(--terracotta); }
+  .sku-tile.is-active { border-color: var(--terracotta); border-width: 2px; }
+  .sku-photo { aspect-ratio: 3/4; background: var(--sand-pale); }
+  .sku-photo :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sku-name { font-size: 12.5px; font-weight: 600; padding: 10px 12px; }
+
+  .stock-panel {
+    border: 1px solid var(--line); border-radius: 4px; background: var(--paper-warm);
+    padding: var(--space-3); margin-bottom: var(--space-4);
+  }
+  .stock-title { font-size: 13.5px; font-weight: 700; margin-bottom: var(--space-2); }
+  .stock-stores { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .stock-store {
+    display: flex; flex-direction: column; gap: 2px; background: var(--paper); border: 1px solid var(--line);
+    border-radius: 4px; padding: 8px 12px; text-decoration: none; color: inherit; font-size: 13px; font-weight: 600;
+  }
+  .stock-store:hover { border-color: var(--terracotta); }
+  .stock-store span { font-size: 11.5px; font-weight: 500; opacity: 0.6; }
+  .stock-empty { font-size: 13.5px; opacity: 0.65; }
+
+  .pouch-note {
+    border: 1px solid var(--line); border-radius: 4px; background: var(--paper-warm); padding: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
   .pouch-note p:first-child { margin-bottom: 8px; }
   .pouch-note p { font-size: 13.5px; opacity: 0.75; line-height: 1.55; }
 
-  .stores { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin: var(--space-4) 0; }
+  .stores-h { margin-bottom: var(--space-2); }
+  .stores { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin: 0 0 var(--space-4); }
   @media (max-width: 940px) { .stores { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) { .stores { grid-template-columns: 1fr; } }
   .store {
