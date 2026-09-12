@@ -15,12 +15,6 @@
       "priceDollars": 17,
       "note": "Same cup, bigger portion.",
       "fulfillment": "market-and-trailer-only"
-    },
-    {
-      "label": "Take-Home (32oz)",
-      "priceDollars": 17,
-      "note": "Frozen quart to reheat at home. Toppings packed separately so nothing gets soggy.",
-      "fulfillment": "delivery-or-pickup"
     }
   ]
 }

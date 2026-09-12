@@ -58,6 +58,19 @@ for (const p of sortedProducts) {
       </p>
     </header>
 
+    <h2 class="stores-h">All stores</h2>
+    <div class="stores">
+      {locations.map((loc) => (
+        <a href={`/where-to-buy/${loc.id}`} class="store" data-store-name={loc.data.name}>
+          <h3>{loc.data.name}</h3>
+          <p class="city">{loc.data.city}</p>
+          <p class="next-demo" data-demo-slot></p>
+          <span class="see-stock">See what's in stock →</span>
+        </a>
+      ))}
+    </div>
+
+    <h2 class="skus-h">Shop by flavor</h2>
     <div class="sku-grid">
       {sortedProducts.map((p) => (
         <button type="button" class="sku-tile" data-sku={p.id}>
@@ -77,18 +90,6 @@ for (const p of sortedProducts) {
     <div class="pouch-note">
       <p><b>What to look for in the freezer aisle.</b></p>
       <p>Two servings per pouch. Toppings (cabbage, radishes, onions, jalapeños, cilantro, oregano, red pepper flakes, limes, avocado) are not included, add your own at home.</p>
-    </div>
-
-    <h2 class="stores-h">All stores</h2>
-    <div class="stores">
-      {locations.map((loc) => (
-        <a href={`/where-to-buy/${loc.id}`} class="store" data-store-name={loc.data.name}>
-          <h3>{loc.data.name}</h3>
-          <p class="city">{loc.data.city}</p>
-          <p class="next-demo" data-demo-slot></p>
-          <span class="see-stock">See what's in stock →</span>
-        </a>
-      ))}
     </div>
 
     <script define:vars={{ apiKey: import.meta.env.PUBLIC_GOOGLE_CALENDAR_API_KEY, calendarId: import.meta.env.PUBLIC_CALENDAR_ID_IN_STORE_DEMOS }}>
@@ -200,6 +201,7 @@ for (const p of sortedProducts) {
 
   .stores-h { margin-bottom: var(--space-2); }
   .stores { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); margin: 0 0 var(--space-4); }
+  .skus-h { margin-bottom: var(--space-2); }
   @media (max-width: 940px) { .stores { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) { .stores { grid-template-columns: 1fr; } }
   .store {

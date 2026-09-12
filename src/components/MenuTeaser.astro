@@ -6,6 +6,7 @@ import photoBurrito from '../assets/photos/burrito.jpg';
 import photoPoznachos from '../assets/photos/poznachos.jpg';
 import photoPozfrito from '../assets/photos/pozfrito.jpg';
 import photoPoztada from '../assets/photos/poztada.jpg';
+import photoTakehomeQuart from '../assets/photos/takehome-quart-hero.png';
 
 const items = (await getCollection('menuItems')).sort((a, b) => a.data.order - b.data.order);
 
@@ -15,16 +16,17 @@ const photos: Record<string, ImageMetadata> = {
   'poznachos': photoPoznachos,
   'pozfrito': photoPozfrito,
   'poztada': photoPoztada,
+  'takehome-pozole': photoTakehomeQuart,
 };
 ---
 <section id="menu">
   <div class="wrap">
     <div class="sec-head">
       <p class="label">At the market</p>
-      <h2>Five ways to eat it.</h2>
+      <h2>Six ways to eat it.</h2>
       <p>Served hot and ready at the trailer and the farmers markets. Every item is finished by you at the toppings table.</p>
     </div>
-    <div class="menu-grid">
+    <div class="menu-grid" style={`--item-count: ${items.length}`}>
       {items.map((item) => {
         const photo = photos[item.id];
         const isDeliverable = item.data.variants.some((v) => v.fulfillment === 'delivery-or-pickup');
@@ -54,8 +56,9 @@ const photos: Record<string, ImageMetadata> = {
 </section>
 
 <style>
-  .menu-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-2); }
-  @media (max-width: 940px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
+  .menu-grid { display: grid; grid-template-columns: repeat(var(--item-count), 1fr); gap: var(--space-2); }
+  @media (max-width: 940px) { .menu-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 640px) { .menu-grid { grid-template-columns: repeat(2, 1fr); } }
   .item { display: block; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); text-decoration: none; transition: border-color 0.15s; }
   .item:hover { border-color: var(--terracotta); }
   .ph {

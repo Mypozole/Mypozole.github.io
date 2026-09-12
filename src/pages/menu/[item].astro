@@ -28,6 +28,7 @@ const photos: Record<string, ImageMetadata> = {
   poznachos: photoPoznachos,
   pozfrito: photoPozfrito,
   poztada: photoPoztada,
+  'takehome-pozole': photoTakehomeQuart,
 };
 const photo = photos[item.id];
 const isPozole = item.id === 'pozole';
@@ -52,11 +53,6 @@ const hasMarketOnly = item.data.variants.some((v) => v.fulfillment === 'market-a
         <div class="variants">
           {item.data.variants.map((v) => (
             <div class="variant">
-              {v.fulfillment === 'delivery-or-pickup' && (
-                <div class="variant-photo">
-                  <Image src={photoTakehomeQuart} alt="MyPozole Take Home Pozole, a frozen 32oz quart with toppings on the side" width={480} height={320} />
-                </div>
-              )}
               <div class="variant-head">
                 <span class="variant-label">{v.label}</span>
                 <span class="variant-price">${v.priceDollars.toFixed(2).replace(/\.00$/, '')}</span>
@@ -105,8 +101,6 @@ const hasMarketOnly = item.data.variants.some((v) => v.fulfillment === 'market-a
 
   .variants { display: grid; gap: var(--space-2); margin-bottom: var(--space-3); }
   .variant { border: 1px solid var(--line); border-radius: 4px; padding: var(--space-2) var(--space-3); background: var(--paper); }
-  .variant-photo { margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-3)) var(--space-2); border-radius: 4px 4px 0 0; overflow: hidden; }
-  .variant-photo :global(img) { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
   .variant-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: 4px; }
   .variant-label { font-weight: 700; font-size: 15px; color: var(--brown); }
   .variant-price { font-family: var(--serif); font-size: 18px; font-weight: 900; color: var(--rust); }

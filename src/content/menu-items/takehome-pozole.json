@@ -1,0 +1,14 @@
+{
+  "name": "Take Home Pozole",
+  "order": 2,
+  "description": "A frozen 32oz quart with toppings included, delivered or picked up.",
+  "longDescription": "The same family recipe as the hot version, sealed in a prepackaged 32oz container and frozen for delivery or pickup, ready to reheat at home. Pork, chicken, or vegan, in White, Red, or Green. Toppings are included in every order, packed in their own separate to-go containers so nothing gets soggy in transit, cabbage, radishes, onions, jalapenos, cilantro, oregano, red pepper flakes, limes, and avocado. This is not the same product as the retail pouches sold in grocery stores, this is made to order and shipped directly.",
+  "variants": [
+    {
+      "label": "Take-Home (32oz)",
+      "priceDollars": 17,
+      "note": "Frozen quart to reheat at home. Toppings packed separately so nothing gets soggy.",
+      "fulfillment": "delivery-or-pickup"
+    }
+  ]
+}
