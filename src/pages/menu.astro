@@ -19,7 +19,10 @@ const fmtPrice = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
         Everything else on this page is market and trailer only, since the
         commissary can't fulfill it.
       </p>
-      <a href="/downloads/mypozole-full-menu-priced.pdf" target="_blank" rel="noopener noreferrer" class="menu-pdf-link">View the full menu (PDF) →</a>
+      <div class="pdf-links">
+        <a href="/downloads/mypozole-full-menu-priced.pdf" target="_blank" rel="noopener noreferrer" class="menu-pdf-link">View the full menu (PDF) →</a>
+        <a href="/downloads/mypozole-full-menu-priced.pdf" download="MyPozole-Full-Menu.pdf" class="menu-pdf-link menu-pdf-download">Download ↓</a>
+      </div>
     </header>
   </div>
   <MenuTeaser />
@@ -63,11 +66,13 @@ const fmtPrice = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
   .page-head { padding: var(--space-6) 0 var(--space-3); }
   .page-head h1 { margin-bottom: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
+  .pdf-links { display: flex; align-items: center; gap: var(--space-3); margin-top: var(--space-2); }
   .menu-pdf-link {
-    display: inline-block; margin-top: var(--space-2); font-size: 14px; font-weight: 700;
+    display: inline-block; font-size: 14px; font-weight: 700;
     color: var(--terracotta); text-decoration: none;
   }
   .menu-pdf-link:hover { text-decoration: underline; }
+  .menu-pdf-download { opacity: 0.75; }
   .order-section { max-width: 480px; margin-top: var(--space-3); }
   .order-section .label { margin-bottom: var(--space-2); }
   .rp-label { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed var(--line); }
