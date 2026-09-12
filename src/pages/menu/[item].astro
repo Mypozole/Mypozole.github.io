@@ -30,7 +30,8 @@ const photos: Record<string, ImageMetadata> = {
 };
 const photo = photos[item.id];
 const isPozole = item.id === 'pozole';
-const isDeliverable = item.data.fulfillment === 'delivery-or-pickup';
+const hasDeliverable = item.data.variants.some((v) => v.fulfillment === 'delivery-or-pickup');
+const hasMarketOnly = item.data.variants.some((v) => v.fulfillment === 'market-and-trailer-only');
 ---
 <BaseLayout title={`${item.data.name} | MyPozole`} description={item.data.description}>
   <div class="wrap">
@@ -44,17 +45,29 @@ const isDeliverable = item.data.fulfillment === 'delivery-or-pickup';
         )}
       </div>
       <div class="info-col">
-        <p class="label">{isDeliverable ? 'Delivery or pickup' : 'Market and trailer only'}</p>
         <h1>{item.data.name}</h1>
         <p class="long-desc">{item.data.longDescription}</p>
-        <p class="fulfillment-note">{item.data.fulfillmentNote}</p>
-        {isDeliverable && (
+
+        <div class="variants">
+          {item.data.variants.map((v) => (
+            <div class="variant">
+              <div class="variant-head">
+                <span class="variant-label">{v.label}</span>
+                <span class="variant-price">${v.priceDollars.toFixed(2).replace(/\.00$/, '')}</span>
+              </div>
+              <p class="variant-note">{v.note}</p>
+              <p class="variant-badge">{v.fulfillment === 'delivery-or-pickup' ? 'Delivery or pickup' : 'Market and trailer only'}</p>
+            </div>
+          ))}
+        </div>
+
+        {hasDeliverable && (
           <a href="/menu#order" class="btn">Order it online</a>
         )}
       </div>
     </div>
 
-    {!isDeliverable && (
+    {hasMarketOnly && (
       <section class="find-section">
         <h2>{isPozole ? 'Find it hot, or buy it frozen' : 'Find it at the market or trailer'}</h2>
         <div class="find-grid">
@@ -82,8 +95,15 @@ const isDeliverable = item.data.fulfillment === 'delivery-or-pickup';
   .photo-placeholder span { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rust); opacity: 0.6; }
 
   .info-col h1 { margin-bottom: var(--space-2); }
-  .long-desc { font-size: 17px; line-height: 1.65; opacity: 0.82; margin-bottom: var(--space-2); }
-  .fulfillment-note { font-size: 13.5px; opacity: 0.6; margin-bottom: var(--space-3); line-height: 1.55; }
+  .long-desc { font-size: 17px; line-height: 1.65; opacity: 0.82; margin-bottom: var(--space-3); }
+
+  .variants { display: grid; gap: var(--space-2); margin-bottom: var(--space-3); }
+  .variant { border: 1px solid var(--line); border-radius: 4px; padding: var(--space-2) var(--space-3); background: var(--paper); }
+  .variant-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-2); margin-bottom: 4px; }
+  .variant-label { font-weight: 700; font-size: 15px; color: var(--brown); }
+  .variant-price { font-family: var(--serif); font-size: 18px; font-weight: 900; color: var(--rust); }
+  .variant-note { font-size: 13.5px; opacity: 0.7; line-height: 1.5; margin-bottom: 6px; }
+  .variant-badge { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--terracotta); }
 
   .find-section { padding: var(--space-4) 0 var(--space-6); border-top: 1px solid var(--line-soft); }
   .find-section h2 { margin-bottom: var(--space-2); }

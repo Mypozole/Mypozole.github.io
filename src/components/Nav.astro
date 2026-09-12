@@ -1,11 +1,7 @@
 ---
 <nav>
   <div class="wrap nav-in">
-    <a href="/" class="logo">
-      <img src="/logo.png" alt="MyPozole" width="60" height="60" />
-      <span class="logo-txt">My<span>Pozole</span></span>
-    </a>
-    <ul class="nav-links">
+    <ul class="nav-links nav-links-left">
       <li class="has-drop">
         <span class="drop-trigger" tabindex="0">Catering</span>
         <ul class="drop">
@@ -21,9 +17,17 @@
           <li><a href="/where-to-buy">Where to buy</a></li>
         </ul>
       </li>
-      <li><a href="/about-pozole">About Pozole</a></li>
     </ul>
-    <a href="/#find" class="nav-cta">Find us today</a>
+    <a href="/" class="logo">
+      <img src="/logo.png" alt="MyPozole" width="68" height="68" />
+      <span class="logo-txt">My<span>Pozole</span></span>
+    </a>
+    <div class="nav-right">
+      <ul class="nav-links nav-links-right">
+        <li><a href="/about-pozole">About Pozole</a></li>
+      </ul>
+      <a href="/#find" class="nav-cta">Find us today</a>
+    </div>
   </div>
 </nav>
 
@@ -34,11 +38,13 @@
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--line-soft);
   }
-  .nav-in { display: flex; align-items: center; justify-content: space-between; height: 92px; gap: var(--space-3); }
-  .logo { display: flex; align-items: center; gap: 13px; text-decoration: none; flex-shrink: 0; }
-  .logo img { width: 60px; height: 60px; object-fit: contain; }
-  .logo-txt { font-family: var(--serif); font-weight: 900; font-size: 27px; color: var(--brown); letter-spacing: -0.03em; }
-  .nav-links { display: flex; gap: var(--space-4); list-style: none; margin-left: auto; }
+  .nav-in { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 96px; gap: var(--space-3); }
+  .logo { display: flex; align-items: center; gap: 14px; text-decoration: none; flex-shrink: 0; justify-self: center; }
+  .logo img { width: 68px; height: 68px; object-fit: contain; }
+  .logo-txt { font-family: var(--serif); font-weight: 900; font-size: 29px; color: var(--brown); letter-spacing: -0.03em; }
+  .nav-links { display: flex; gap: var(--space-4); list-style: none; }
+  .nav-links-left { justify-self: start; }
+  .nav-right { display: flex; align-items: center; gap: var(--space-4); justify-self: end; }
   .nav-links > li { position: relative; }
   .nav-links a, .drop-trigger { color: var(--brown); text-decoration: none; font-size: 14.5px; font-weight: 500; opacity: 0.72; transition: opacity 0.15s; }
   .nav-links > li > a:hover, .has-drop:hover .drop-trigger, .drop-trigger:focus { opacity: 1; }

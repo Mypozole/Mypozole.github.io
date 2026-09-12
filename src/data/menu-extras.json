@@ -1,0 +1,36 @@
+{
+  "source": "MyPozole_Menu_Redesign.pdf, confirmed 2026-09-11",
+  "includedWithEveryOrder": [
+    "Shredded cabbage",
+    "Radishes",
+    "Onions",
+    "Jalapeños",
+    "Cilantro",
+    "Oregano",
+    "Red pepper flakes",
+    "Fresh-squeezed lime",
+    "Salsa roja",
+    "Salsa verde"
+  ],
+  "extras": [
+    { "label": "Avocado — single (3 slices)", "priceDollars": 1 },
+    { "label": "Avocado — double (6 slices)", "priceDollars": 2 },
+    { "label": "Double pozole add-on", "priceDollars": 3, "note": "Add extra pozole to a burrito, nachos, or tostada order; mix and match styles if you like." },
+    { "label": "Cup of broth — 4oz", "priceDollars": 1 },
+    { "label": "Cup of broth — 12oz", "priceDollars": 5 },
+    { "label": "Take-home tostadas, order of 6", "priceDollars": 3 },
+    { "label": "Tostada add-on, 2 tostadas", "priceDollars": 1 },
+    { "label": "Side, 3.2oz — beans, sour cream, or salsa", "priceDollars": 0.5 },
+    { "label": "Extra salsa, each", "priceDollars": 0.25 }
+  ],
+  "volumeDiscounts": {
+    "appliesTo": "32oz sizes (Pozole Double, Take-Home, Pozfrito Double)",
+    "tiers": [
+      { "quantity": 1, "totalDollars": 17 },
+      { "quantity": 2, "totalDollars": 32 },
+      { "quantity": 3, "totalDollars": 45 },
+      { "quantity": 4, "totalDollars": 56 }
+    ],
+    "beyondTiersNote": "No discount tier given past 4 units; priced as the 4-unit total plus $17 per additional unit."
+  }
+}

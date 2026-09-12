@@ -4,6 +4,9 @@ import MenuTeaser from '../components/MenuTeaser.astro';
 import OnlineOrderBuilder from '../components/OnlineOrderBuilder.astro';
 import RetailPouchOrderBuilder from '../components/RetailPouchOrderBuilder.astro';
 import onlineOrdering from '../data/online-ordering.json';
+import menuExtras from '../data/menu-extras.json';
+
+const fmtPrice = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
 ---
 <BaseLayout title="Menu | MyPozole" description="Five ways to eat MyPozole, at the market, the trailer, or delivered.">
   <div class="wrap">
@@ -11,16 +14,42 @@ import onlineOrdering from '../data/online-ordering.json';
       <p class="label">Menu</p>
       <h1>Five ways to eat it.</h1>
       <p class="intro">
-        Pozole itself can be delivered or picked up, ${onlineOrdering.minimumDollars} minimum,
+        The Take-Home Pozole quart can be delivered or picked up, ${onlineOrdering.minimumDollars} minimum,
         ${onlineOrdering.deliveryFeeDollars} delivery fee. {onlineOrdering.fulfillsOnly}{' '}
         Everything else on this page is market and trailer only, since the
         commissary can't fulfill it.
       </p>
-      <a href="/downloads/mypozole-full-menu.pdf" target="_blank" rel="noopener noreferrer" class="menu-pdf-link">View the full menu (PDF) →</a>
+      <a href="/downloads/mypozole-full-menu-priced.pdf" target="_blank" rel="noopener noreferrer" class="menu-pdf-link">View the full menu (PDF) →</a>
     </header>
   </div>
   <MenuTeaser />
   <div class="wrap">
+    <section class="extras-section">
+      <p class="label">Included with every order</p>
+      <p class="included-list">{menuExtras.includedWithEveryOrder.join(' · ')}</p>
+
+      <p class="label extras-label">Extras &amp; add-ons</p>
+      <div class="extras-grid">
+        {menuExtras.extras.map((e) => (
+          <div class="extra">
+            <span class="extra-name">{e.label}</span>
+            <span class="extra-price">{fmtPrice(e.priceDollars)}</span>
+          </div>
+        ))}
+      </div>
+
+      <p class="label discounts-label">Volume discounts</p>
+      <p class="discounts-note">{menuExtras.volumeDiscounts.appliesTo}</p>
+      <div class="discounts-row">
+        {menuExtras.volumeDiscounts.tiers.map((t) => (
+          <div class="discount-tier">
+            <span class="tier-qty">Buy {t.quantity}</span>
+            <span class="tier-price">{fmtPrice(t.totalDollars)}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
     <div class="order-section" id="order">
       <p class="label">Order Take Home Pozole online</p>
       <OnlineOrderBuilder />
@@ -42,4 +71,23 @@ import onlineOrdering from '../data/online-ordering.json';
   .order-section { max-width: 480px; margin-top: var(--space-3); }
   .order-section .label { margin-bottom: var(--space-2); }
   .rp-label { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed var(--line); }
+
+  .extras-section { max-width: 640px; margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--line-soft); }
+  .included-list { font-size: 13.5px; opacity: 0.72; line-height: 1.6; margin-bottom: var(--space-3); }
+  .extras-label { margin-top: var(--space-3); margin-bottom: var(--space-2); }
+  .extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px var(--space-3); margin-bottom: var(--space-3); }
+  @media (max-width: 560px) { .extras-grid { grid-template-columns: 1fr; } }
+  .extra { display: flex; justify-content: space-between; gap: var(--space-2); font-size: 13.5px; padding: 6px 0; border-bottom: 1px dotted var(--line); }
+  .extra-name { opacity: 0.78; }
+  .extra-price { font-weight: 700; color: var(--terracotta); white-space: nowrap; }
+
+  .discounts-label { margin-top: var(--space-3); margin-bottom: 4px; }
+  .discounts-note { font-size: 12.5px; opacity: 0.6; margin-bottom: var(--space-2); }
+  .discounts-row { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+  .discount-tier {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    border: 1px solid var(--line); border-radius: 4px; padding: 8px 16px; background: var(--paper-warm);
+  }
+  .tier-qty { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.65; }
+  .tier-price { font-family: var(--serif); font-size: 17px; font-weight: 900; color: var(--rust); }
 </style>

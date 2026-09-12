@@ -1,8 +1,14 @@
 {
   "name": "Poztada",
-  "order": 4,
+  "order": 3,
   "description": "Pozole over crisp tostada shells, cabbage, radish, lime.",
-  "fulfillment": "market-and-trailer-only",
-  "fulfillmentNote": "No commissary path, market and trailer only.",
-  "longDescription": "Pozole ladled over crisp tostada shells instead of served in broth, so you get crunch in every bite instead of soup. Cabbage, radish, and lime on top, the same way you'd dress a real tostada, just built on our hominy and protein instead of the usual fillings."
+  "longDescription": "Two crisp tostada shells topped with vegan beans or sour cream, then pozole, toppings, and salsas, so you get crunch in every bite instead of soup. The same way you'd dress a real tostada, just built on our hominy and protein instead of the usual fillings.",
+  "variants": [
+    {
+      "label": "Poztada Plate",
+      "priceDollars": 12,
+      "note": "Two crisp tostada shells, vegan beans or sour cream, topped with pozole, toppings, and salsas.",
+      "fulfillment": "market-and-trailer-only"
+    }
+  ]
 }

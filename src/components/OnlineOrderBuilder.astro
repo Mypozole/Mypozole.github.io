@@ -1,10 +1,13 @@
 ---
 import onlineOrdering from '../data/online-ordering.json';
+import menuExtras from '../data/menu-extras.json';
 import site from '../data/site.json';
 
 const styleLabel: Record<string, string> = { white: 'White', red: 'Red', green: 'Green' };
 const proteinLabel: Record<string, string> = { pork: 'Pork', chicken: 'Chicken', vegan: 'Vegan' };
-const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail — see caveat in the UI
+// Real, confirmed price (Pozole Take-Home, 32oz), MyPozole_Menu_Redesign.pdf, 2026-09-11.
+const unitPrice = 17;
+const tiers = menuExtras.volumeDiscounts.tiers;
 ---
 <form
   class="builder"
@@ -12,7 +15,8 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
   novalidate
   data-min={onlineOrdering.minimumDollars}
   data-delivery-fee={onlineOrdering.deliveryFeeDollars}
-  data-unit-price={estimatedUnitPrice}
+  data-unit-price={unitPrice}
+  data-tiers={JSON.stringify(tiers)}
   data-email={site.email}
   data-formspree="https://formspree.io/f/xlgyqkpq"
   data-payments-endpoint="https://mypozole-payments-mypozole.vercel.app/api/create-payment-link"
@@ -55,9 +59,9 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
   </div>
   <p class="min-warning" id="ob-min-warning"></p>
   <p class="fine">
-    Priced using the ${estimatedUnitPrice} retail pouch rate, no separate online-order price has been set yet.
-    ${onlineOrdering.minimumDollars} order minimum applies. You'll pay this total now on Square's secure checkout.
-    {onlineOrdering.fulfillsOnly}
+    ${unitPrice} per 32oz quart, with volume pricing built in (buy {tiers[tiers.length - 1].quantity} for
+    ${tiers[tiers.length - 1].totalDollars}). ${onlineOrdering.minimumDollars} order minimum applies.
+    You'll pay this total now on Square's secure checkout. {onlineOrdering.fulfillsOnly}
   </p>
 
   <div class="details">
@@ -99,6 +103,7 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
     const minDollars = Number(form.dataset.min);
     const deliveryFee = Number(form.dataset.deliveryFee);
     const unitPrice = Number(form.dataset.unitPrice);
+    const tiers: { quantity: number; totalDollars: number }[] = JSON.parse(form.dataset.tiers || '[]');
     const email = form.dataset.email as string;
     const formspree = form.dataset.formspree as string;
     const paymentsEndpoint = form.dataset.paymentsEndpoint as string;
@@ -136,9 +141,18 @@ const estimatedUnitPrice = 15.99; // retail pouch price, mypozole.com/retail —
     function validEmail(s: string) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
     function validPhone(s: string) { return s.replace(/\D/g, '').length >= 10; }
 
+    function priceForQty(n: number): number {
+      if (n <= 0 || tiers.length === 0) return n * unitPrice;
+      const exact = tiers.find((t) => t.quantity === n);
+      if (exact) return exact.totalDollars;
+      const maxTier = tiers[tiers.length - 1];
+      if (n > maxTier.quantity) return maxTier.totalDollars + (n - maxTier.quantity) * unitPrice;
+      return n * unitPrice;
+    }
+
     function computeTotal() {
       const items = cart.reduce((sum, l) => sum + l.qty, 0);
-      const subtotal = cart.reduce((sum, l) => sum + l.qty * unitPrice, 0);
+      const subtotal = priceForQty(items);
       const isDelivery = fulfillment() === 'delivery';
       const total = subtotal + (isDelivery && items > 0 ? deliveryFee : 0);
       return { items, subtotal, isDelivery, total };

@@ -59,9 +59,17 @@ const menuItems = defineCollection({
     name: z.string(),
     description: z.string(),
     longDescription: z.string(),
-    fulfillment: z.enum(['delivery-or-pickup', 'market-and-trailer-only']),
-    fulfillmentNote: z.string(),
     order: z.number(),
+    // Real, confirmed pricing from MyPozole_Menu_Redesign.pdf (2026-09-11). A
+    // single named item (e.g. "Pozole") can have multiple purchasable sizes/
+    // formats, each with its own price and fulfillment, since e.g. Pozole's
+    // Single/Double are market-only but its Take-Home is delivery-or-pickup.
+    variants: z.array(z.object({
+      label: z.string(),
+      priceDollars: z.number(),
+      note: z.string(),
+      fulfillment: z.enum(['delivery-or-pickup', 'market-and-trailer-only']),
+    })),
   }),
 });
 
