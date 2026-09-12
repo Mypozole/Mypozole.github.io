@@ -19,12 +19,17 @@ change too."
 
 ## Add new photos (no current photo at all)
 
-- **Take Home Pozole, added 2026-09-11**: new menu item (split out of
-  "Pozole" as its own delivery/pickup product, see `TODO.md` 2026-09-11).
-  `src/pages/menu/[item].astro` falls back to a text placeholder since
-  `takehome-pozole` has no entry in its `photos` map yet. A real photo
-  of the sealed frozen quart would need a code change too, since that
-  map is still hardcoded per item id.
+- ~~**Take Home Pozole**~~ **Resolved 2026-09-12, with the same AI-image
+  caveat as the 9 SKU photos below.** Take-Home is now the delivery/
+  pickup variant of "Pozole" (per `MyPozole_Menu_Redesign.pdf`, see
+  `TODO.md` 2026-09-11/12), not its own item. Owner supplied
+  `takehome-quart-hero.png`, filed like the SKU photos as a ChatGPT
+  image-generator export (`ChatGPT Image Sep 11, 2026, 10_11_16 PM.png`)
+  and reading the same way visually. Flagged to the owner directly 2026-
+  09-12; they confirmed using it anyway, same call as the SKU set. Live
+  on the Take-Home order section (`src/pages/menu.astro`) and the
+  Take-Home variant card on the Pozole item page
+  (`src/pages/menu/[item].astro`).
 
 - ~~**All 5 menu item photos**~~ **Resolved 2026-09-03.** Owner supplied
   a matched 5-photo set (Pozole, Pozole Burrito, Poztada, Poznachos,

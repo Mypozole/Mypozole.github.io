@@ -5,6 +5,8 @@ import OnlineOrderBuilder from '../components/OnlineOrderBuilder.astro';
 import RetailPouchOrderBuilder from '../components/RetailPouchOrderBuilder.astro';
 import onlineOrdering from '../data/online-ordering.json';
 import menuExtras from '../data/menu-extras.json';
+import { Image } from 'astro:assets';
+import takehomeQuartPhoto from '../assets/photos/takehome-quart-hero.png';
 
 const fmtPrice = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
 ---
@@ -55,6 +57,9 @@ const fmtPrice = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
 
     <div class="order-section" id="order">
       <p class="label">Order Take Home Pozole online</p>
+      <div class="takehome-photo">
+        <Image src={takehomeQuartPhoto} alt="MyPozole Take Home Pozole, a frozen 32oz quart with toppings on the side" width={640} height={427} />
+      </div>
       <OnlineOrderBuilder />
       <p class="label rp-label">Order retail pouches online</p>
       <RetailPouchOrderBuilder />
@@ -75,6 +80,8 @@ const fmtPrice = (n: number) => `$${n.toFixed(2).replace(/\.00$/, '')}`;
   .menu-pdf-download { opacity: 0.75; }
   .order-section { max-width: 480px; margin-top: var(--space-3); }
   .order-section .label { margin-bottom: var(--space-2); }
+  .takehome-photo { border-radius: 4px; overflow: hidden; margin-bottom: var(--space-2); }
+  .takehome-photo :global(img) { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
   .rp-label { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px dashed var(--line); }
 
   .extras-section { max-width: 640px; margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--line-soft); }

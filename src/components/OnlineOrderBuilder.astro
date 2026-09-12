@@ -82,13 +82,13 @@ const tiers = menuExtras.volumeDiscounts.tiers;
     </div>
   </div>
 
-  <button type="submit" class="btn submit" id="ob-submit">Send this order</button>
+  <button type="submit" class="btn submit" id="ob-submit">Continue to secure checkout →</button>
   <p class="ob-status" id="ob-status"></p>
 </form>
 
 <div class="builder confirm" id="ob-confirm">
   <div class="check">&#10003;</div>
-  <h3>Order request sent.</h3>
+  <h3>You're all set.</h3>
   <p class="reach" id="ob-reach"></p>
 </div>
 
@@ -215,7 +215,7 @@ const tiers = menuExtras.volumeDiscounts.tiers;
 
       const lines = cart.map((l) => `${l.qty} x ${labels[l.protein]} ${labels[l.style]}`).join('\n');
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
+      submitBtn.textContent = 'Submitting order...';
 
       try {
         const res = await fetch(formspree, {
@@ -257,7 +257,7 @@ const tiers = menuExtras.volumeDiscounts.tiers;
         console.error('Online order submission failed', err);
         statusEl.textContent = `Something went wrong. Please email your order to ${email}.`;
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Send this order';
+        submitBtn.textContent = 'Continue to secure checkout →';
       }
     });
 
