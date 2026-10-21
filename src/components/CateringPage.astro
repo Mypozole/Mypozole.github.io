@@ -32,6 +32,7 @@ const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole
         <p class="label">{eyebrow}</p>
         <h1>{title}</h1>
         <p class="intro">{intro}</p>
+        <a href={site.onlineStoreUrl} class="btn order-catering">Order Catering</a>
       </header>
 
       {heroPhoto && (
@@ -116,6 +117,7 @@ const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole
   .page-head { padding: 0; }
   .hero-row.has-photo .page-head { padding-right: var(--space-2); }
   .intro { font-size: 17px; opacity: 0.78; max-width: 62ch; line-height: 1.6; }
+  .order-catering { margin-top: var(--space-3); }
 
   .page-hero {
     aspect-ratio: 4 / 5; width: 100%; border-radius: 6px; overflow: hidden; background: var(--sand);
