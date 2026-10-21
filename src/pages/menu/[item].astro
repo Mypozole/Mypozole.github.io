@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import FindMyPozole from '../../components/FindMyPozole.astro';
 import WhereToBuyTeaser from '../../components/WhereToBuyTeaser.astro';
+import site from '../../data/site.json';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import photoPozole from '../../assets/photos/pozole.jpg';
@@ -64,7 +65,7 @@ const hasMarketOnly = item.data.variants.some((v) => v.fulfillment === 'market-a
         </div>
 
         {hasDeliverable && (
-          <a href="/menu#order" class="btn">Order it online</a>
+          <a href={site.onlineStoreUrl} class="btn">Order it online</a>
         )}
       </div>
     </div>
