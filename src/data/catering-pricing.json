@@ -1,15 +1,14 @@
 {
   "source": "MyPozole_Claude_Design_Build_Brief.md section 4, and MyPozole_Sitemap.md section 3, built from the confirmed 2026 catering PDF pricing",
   "dropOff": {
-    "pricePerQuart": 16,
-    "minimumQuarts": 4,
-    "minimumDollars": 64,
-    "note": "$64 is the real catering drop-off minimum ($16/quart x 4-quart minimum). Separate and distinct from the $40 minimum on individual online Menu orders. Never merge the two numbers in copy.",
-    "leadTimes": [
-      { "range": "4 to 12 quarts", "notice": "24 hours" },
-      { "range": "13 to 50 quarts", "notice": "48 hours" },
-      { "range": "above 50 quarts", "notice": "contact directly" }
-    ]
+    "source": "Square online store (mypozole.square.site), confirmed 2026-10-26. Keep in sync with the store's catering prices.",
+    "pricePerPerson": 8,
+    "servingOz": 8,
+    "containerPrice": 30,
+    "containerOz": 64,
+    "minimumContainers": 2,
+    "servingsPerContainer": 8,
+    "noticeDays": 1
   },
   "pozolePartyPackages": {
     "source": "MyPozole Catering Packages 2026.pdf, provided directly by Jorge 2026-08-30. Resolves the earlier minimum-headcount conflict, each package simply has its own minimum (40 / 35 / 30), the two older source docs were each only describing one package.",
