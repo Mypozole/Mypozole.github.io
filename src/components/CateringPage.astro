@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import CateringQuoteBuilder from './CateringQuoteBuilder.astro';
 import cateringData from '../data/catering-pricing.json';
 import site from '../data/site.json';
 import { Image } from 'astro:assets';
@@ -44,10 +43,16 @@ const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole
 
     {showDropOff && (
       <div class="builder-section">
-        <p class="label">Build your order</p>
-        <h2>Get a price in 20 seconds.</h2>
-        <p class="builder-lead">Pick your quarts, see your total, send it to us. We confirm within hours. Nothing is charged now.</p>
-        <CateringQuoteBuilder testimonialQuote={testimonialQuote} testimonialAttr={testimonialAttr} />
+        <p class="label">Order catering</p>
+        <h2>Order online in a few minutes.</h2>
+        <p class="builder-lead">Choose your pozole, protein and salsa style, then pick delivery or pickup and pay securely at checkout in our online store.</p>
+        <a href={site.onlineStoreUrl} class="btn store-btn">Order Catering</a>
+        {testimonialAttr && (
+          <blockquote class="store-quote">
+            <p>&ldquo;{testimonialQuote}&rdquo;</p>
+            <div class="attr">&mdash; {testimonialAttr}</div>
+          </blockquote>
+        )}
       </div>
     )}
 
@@ -130,6 +135,9 @@ const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole
   .builder-section .label { justify-content: center; display: flex; }
   .builder-section h2 { margin-bottom: 10px; }
   .builder-lead { font-size: 16px; opacity: 0.72; max-width: 46ch; margin: 0 auto var(--space-3); }
+  .store-btn { font-size: 18px; padding: 16px 32px; }
+  .store-quote { max-width: 46ch; margin: var(--space-4) auto 0; font-family: var(--serif); font-size: 17px; line-height: 1.5; color: var(--brown); }
+  .store-quote .attr { font-family: var(--sans); font-size: 13px; opacity: 0.65; margin-top: 8px; }
 
   .party { padding-bottom: var(--space-4); }
   .party-head { text-align: center; margin-bottom: var(--space-4); }
