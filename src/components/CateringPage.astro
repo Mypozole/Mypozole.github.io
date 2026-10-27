@@ -22,6 +22,7 @@ const {
   heroPhoto, heroAlt = '', testimonialQuote = '', testimonialAttr = '',
 } = Astro.props;
 const party = cateringData.pozolePartyPackages;
+const drop = cateringData.dropOff;
 const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole Party inquiry')}`;
 ---
 <BaseLayout title={`${title} | MyPozole Catering`} description={intro}>
@@ -45,7 +46,7 @@ const partyMailHref = `mailto:${site.email}?subject=${encodeURIComponent('Pozole
       <div class="builder-section">
         <p class="label">Order catering</p>
         <h2>Order online in a few minutes.</h2>
-        <p class="builder-lead">Choose your pozole, protein and salsa style, then pick delivery or pickup and pay securely at checkout in our online store.</p>
+        <p class="builder-lead">${drop.pricePerPerson} per person, or ${drop.containerPrice} per {drop.containerOz} oz container ({drop.minimumContainers} minimum, about {drop.servingsPerContainer} servings each). Choose your pozole, protein and salsa style, then pick delivery or pickup and pay securely at checkout in our online store. Please order at least a day ahead.</p>
         <a href={site.onlineStoreUrl} class="btn store-btn">Order Catering</a>
         {testimonialAttr && (
           <blockquote class="store-quote">
