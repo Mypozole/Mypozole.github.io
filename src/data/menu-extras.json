@@ -24,7 +24,7 @@
     { "label": "Extra salsa, each", "priceDollars": 0.25 }
   ],
   "volumeDiscounts": {
-    "appliesTo": "32oz sizes (Pozole Double, Take-Home, Pozfrito Double)",
+    "appliesTo": "32oz sizes at the market and trailer (Pozole Double, Pozfrito Double)",
     "tiers": [
       { "quantity": 1, "totalDollars": 17 },
       { "quantity": 2, "totalDollars": 32 },
