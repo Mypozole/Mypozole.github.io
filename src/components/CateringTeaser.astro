@@ -1,6 +1,7 @@
 ---
 import cateringData from '../data/catering-pricing.json';
 import CateringIcon from './CateringIcon.astro';
+import site from '../data/site.json';
 const d = cateringData.dropOff;
 ---
 <section class="band" id="catering">
@@ -8,7 +9,7 @@ const d = cateringData.dropOff;
     <div class="sec-head">
       <p class="label">Catering</p>
       <h2>Feed the whole room.</h2>
-      <p>Drop-off starts at ${d.minimumDollars} (${d.pricePerQuart}/quart, {d.minimumQuarts}-quart minimum). Pick the door that matches your event.</p>
+      <p>Drop-off is ${d.pricePerPerson} per person, or ${d.containerPrice} per {d.containerOz} oz container ({d.minimumContainers} minimum, about {d.servingsPerContainer} servings each). <a href={site.onlineStoreUrl}>Order online</a> at least a day ahead, or pick the door that matches your event.</p>
     </div>
     <div class="doors">
       <a href="/catering/home" class="door">
