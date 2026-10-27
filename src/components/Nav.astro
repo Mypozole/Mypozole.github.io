@@ -1,4 +1,6 @@
 ---
+import site from '../data/site.json';
+---
 <nav>
   <div class="wrap nav-in">
     <a href="/" class="logo">
@@ -23,7 +25,7 @@
       </li>
       <li><a href="/about-pozole">About Pozole</a></li>
     </ul>
-    <a href="/#find" class="nav-cta">Find us today</a>
+    <a href={site.onlineStoreUrl} class="nav-cta">Order online</a>
   </div>
 </nav>
 
