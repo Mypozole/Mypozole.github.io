@@ -6,13 +6,19 @@
   "variants": [
     {
       "label": "Single (16oz)",
-      "priceDollars": 11,
+      "priceDollars": 12,
       "note": "Fritos on the bottom, pozole and extra broth on top, vegan beans, sour cream, salsa, and more Fritos to finish. Eaten with a fork.",
       "fulfillment": "market-and-trailer-only"
     },
     {
+      "label": "Grande (26oz)",
+      "priceDollars": 15,
+      "note": "A bigger cup, between the Single and the Double.",
+      "fulfillment": "market-and-trailer-only"
+    },
+    {
       "label": "Double (32oz)",
-      "priceDollars": 17,
+      "priceDollars": 18,
       "note": "Same idea, bigger cup.",
       "fulfillment": "market-and-trailer-only"
     }
