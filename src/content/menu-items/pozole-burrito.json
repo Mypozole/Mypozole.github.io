@@ -6,7 +6,7 @@
   "variants": [
     {
       "label": "Burrito",
-      "priceDollars": 12,
+      "priceDollars": 13,
       "note": "Wrapped in a flour tortilla with your spread and toppings, salsa on the side.",
       "fulfillment": "market-and-trailer-only"
     },
