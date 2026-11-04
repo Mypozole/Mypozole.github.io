@@ -6,13 +6,19 @@
   "variants": [
     {
       "label": "Single (16oz)",
-      "priceDollars": 11,
+      "priceDollars": 12,
       "note": "One cup, hot and ready to eat. Your style, your protein.",
       "fulfillment": "market-and-trailer-only"
     },
     {
+      "label": "Grande (26oz)",
+      "priceDollars": 15,
+      "note": "A bigger cup, between the Single and the Double.",
+      "fulfillment": "market-and-trailer-only"
+    },
+    {
       "label": "Double (32oz)",
-      "priceDollars": 17,
+      "priceDollars": 18,
       "note": "Same cup, bigger portion.",
       "fulfillment": "market-and-trailer-only"
     }
