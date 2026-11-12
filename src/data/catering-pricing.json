@@ -7,7 +7,7 @@
     "containerPrice": 30,
     "containerOz": 64,
     "minimumContainers": 2,
-    "servingsPerContainer": 8,
+    "servingsPerContainer": 4,
     "noticeDays": 1
   },
   "pozolePartyPackages": {
